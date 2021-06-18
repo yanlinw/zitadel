@@ -8,6 +8,7 @@ import (
 	"github.com/caos/zitadel/internal/errors"
 	"github.com/caos/zitadel/internal/eventstore"
 	"github.com/caos/zitadel/internal/eventstore/repository"
+	"github.com/caos/zitadel/internal/repository/asset"
 )
 
 const (
@@ -15,6 +16,8 @@ const (
 	CustomTextSetEventType             = customTextPrefix + "set"
 	CustomTextRemovedEventType         = customTextPrefix + "removed"
 	CustomTextTemplateRemovedEventType = customTextPrefix + "template.removed"
+	CustomTextFileUploadedEventType    = customTextPrefix + "file.uplaoded"
+	CustomTextFileRemovedEventType     = customTextPrefix + "file.removed"
 )
 
 type CustomTextSetEvent struct {
@@ -135,4 +138,58 @@ func CustomTextTemplateRemovedEventMapper(event *repository.Event) (eventstore.E
 	}
 
 	return e, nil
+}
+
+type CustomTextFileUploadedEvent struct {
+	asset.AddedEvent
+}
+
+func (e *CustomTextFileUploadedEvent) Data() interface{} {
+	return e
+}
+
+func (e *CustomTextFileUploadedEvent) UniqueConstraints() []*eventstore.EventUniqueConstraint {
+	return nil
+}
+
+func NewCustomTextFileUploadedEvent(base *eventstore.BaseEvent, storageKey string) *CustomTextFileUploadedEvent {
+	return &CustomTextFileUploadedEvent{
+		*asset.NewAddedEvent(base, storageKey),
+	}
+}
+
+func CustomTextFileUploadedEventMapper(event *repository.Event) (eventstore.EventReader, error) {
+	e, err := asset.AddedEventMapper(event)
+	if err != nil {
+		return nil, err
+	}
+
+	return &CustomTextFileUploadedEvent{*e.(*asset.AddedEvent)}, nil
+}
+
+type CustomTextFileRemovedEvent struct {
+	asset.RemovedEvent
+}
+
+func (e *CustomTextFileRemovedEvent) Data() interface{} {
+	return e
+}
+
+func (e *CustomTextFileRemovedEvent) UniqueConstraints() []*eventstore.EventUniqueConstraint {
+	return nil
+}
+
+func NewCustomTextFileRemovedEvent(base *eventstore.BaseEvent, storageKey string) *CustomTextFileRemovedEvent {
+	return &CustomTextFileRemovedEvent{
+		*asset.NewRemovedEvent(base, storageKey),
+	}
+}
+
+func CustomTextFileRemovedEventMapper(event *repository.Event) (eventstore.EventReader, error) {
+	e, err := asset.RemovedEventMapper(event)
+	if err != nil {
+		return nil, err
+	}
+
+	return &CustomTextFileRemovedEvent{*e.(*asset.RemovedEvent)}, nil
 }

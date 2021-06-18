@@ -19,6 +19,8 @@ const (
 	LabelPolicyLogoPath = labelPolicyLogoPrefix
 	LabelPolicyIconPath = labelPolicyIconPrefix
 	LabelPolicyFontPath = labelPolicyFontPrefix
+
+	TranslationFilePath = "i18n"
 )
 
 type AssetInfo struct {

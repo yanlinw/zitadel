@@ -11,7 +11,9 @@ import (
 )
 
 var (
-	CustomTextSetEventType = iamEventTypePrefix + policy.CustomTextSetEventType
+	CustomTextSetEventType          = iamEventTypePrefix + policy.CustomTextSetEventType
+	CustomTextFileUploadedEventType = iamEventTypePrefix + policy.CustomTextFileUploadedEventType
+	CustomTextFileRemovedEventType  = iamEventTypePrefix + policy.CustomTextFileRemovedEventType
 )
 
 type CustomTextSetEvent struct {
@@ -43,4 +45,62 @@ func CustomTextSetEventMapper(event *repository.Event) (eventstore.EventReader, 
 	}
 
 	return &CustomTextSetEvent{CustomTextSetEvent: *e.(*policy.CustomTextSetEvent)}, nil
+}
+
+type CustomTextFileUploadedEvent struct {
+	policy.CustomTextFileUploadedEvent
+}
+
+func NewCustomTextFileUploadedEvent(
+	ctx context.Context,
+	aggregate *eventstore.Aggregate,
+	storageKey string,
+) *CustomTextFileUploadedEvent {
+	return &CustomTextFileUploadedEvent{
+		CustomTextFileUploadedEvent: *policy.NewCustomTextFileUploadedEvent(
+			eventstore.NewBaseEventForPush(
+				ctx,
+				aggregate,
+				CustomTextFileUploadedEventType),
+			storageKey,
+		),
+	}
+}
+
+func CustomTextFileUploadedEventMapper(event *repository.Event) (eventstore.EventReader, error) {
+	e, err := policy.CustomTextFileUploadedEventMapper(event)
+	if err != nil {
+		return nil, err
+	}
+
+	return &CustomTextFileUploadedEvent{CustomTextFileUploadedEvent: *e.(*policy.CustomTextFileUploadedEvent)}, nil
+}
+
+type CustomTextFileRemovedEvent struct {
+	policy.CustomTextFileRemovedEvent
+}
+
+func NewCustomTextFileRemovedEvent(
+	ctx context.Context,
+	aggregate *eventstore.Aggregate,
+	storageKey string,
+) *CustomTextFileRemovedEvent {
+	return &CustomTextFileRemovedEvent{
+		CustomTextFileRemovedEvent: *policy.NewCustomTextFileRemovedEvent(
+			eventstore.NewBaseEventForPush(
+				ctx,
+				aggregate,
+				CustomTextFileRemovedEventType),
+			storageKey,
+		),
+	}
+}
+
+func CustomTextFileRemovedEventMapper(event *repository.Event) (eventstore.EventReader, error) {
+	e, err := policy.CustomTextFileRemovedEventMapper(event)
+	if err != nil {
+		return nil, err
+	}
+
+	return &CustomTextFileRemovedEvent{CustomTextFileRemovedEvent: *e.(*policy.CustomTextFileRemovedEvent)}, nil
 }
