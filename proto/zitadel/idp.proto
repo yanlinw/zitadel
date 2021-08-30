@@ -198,3 +198,166 @@ enum IDPFieldName {
     IDP_FIELD_NAME_UNSPECIFIED = 0;
     IDP_FIELD_NAME_NAME = 1;
 }
+
+message IDPClaimMapping {
+    repeated UserSetter setter = 1;
+}
+
+message UserSetter {
+    oneof setter {
+        UserStringSetter string = 1;
+        UserIntSetter int = 2;
+        UserBoolSetter bool = 3;
+        UserMetadataSetter metadata = 4;
+    }
+}
+
+message UserStringSetter {
+    UserStringField field = 1;
+    StringValue value = 2;
+}
+
+enum UserStringField {
+    UserStringFieldUnspecified = 0;
+    StringFieldUsername = 1;
+    StringFieldFirstName = 2;
+}
+
+message UserIntSetter {
+    UserIntField field = 1;
+    IntValue value = 2;
+}
+
+enum UserIntField {
+    UserIntFieldUnspecified = 0;
+    IntFieldGender = 1;
+}
+
+message UserBoolSetter {
+    UserBoolField field = 1;
+    BoolValue value = 2;
+}
+
+enum UserBoolField {
+    UserBoolFieldUnspecified = 0;
+    UserBoolFieldEmailVerified = 1;
+    UserBoolFieldPhoneVerified = 2;
+}
+
+message UserMetadataSetter {
+    oneof setter {
+        MetadataEntrySetter entry = 1;
+        MetadataRangeSetter range = 2;
+    }
+}
+
+message MetadataEntrySetter {
+    StringValue key = 1;
+    BytesValue value = 2;
+}
+
+message MetadataRangeSetter {
+    string identifier = 1;
+    MetadataEntrySetter entry_setter = 2;
+}
+
+message StringValue {
+    oneof value {
+        string string = 1;
+        string identifier = 2;
+        Trim trim = 3;
+        Split split = 4;
+        Concat concat = 5;
+        StringFromInt from_int = 6;
+    }
+}
+
+message Trim {
+    StringValue value = 1;
+}
+
+message Split {
+    StringValue value = 1;
+    string separator = 2;
+    int32 take = 3;
+}
+
+message Concat {
+    StringValue value_left = 1;
+    StringValue value_right = 2;
+}
+
+message StringFromInt {
+    IntValue value = 1;
+}
+
+message IntValue {
+    oneof value {
+        int32 int = 1;
+        string identifier = 2;
+        IntFromString from_string = 3;
+    }
+}
+
+message IntFromString {
+    StringValue string = 1;
+}
+
+message BoolValue {
+    oneof value {
+        bool bool = 1;
+        string identifier = 2;
+        BoolFromString from_string = 3;
+    }
+}
+
+message BoolFromString {
+    StringValue string = 1;
+}
+
+message BytesValue {
+    oneof value {
+        bytes bytes = 1;
+        string identifier = 2;
+        BytesFromString from_string = 3;
+    }
+}
+
+message BytesFromString {
+    StringValue string = 1;
+}
+
+
+message UserGrantMapping {
+   repeated UserGrantSetter setter = 1;
+}
+
+message UserGrantSetter {
+    oneof setter {
+        UserGrantEntrySetter grant = 1;
+        UserGrantRangeSetter range = 2;
+    }
+}
+
+message UserGrantRangeSetter {
+    string identifier = 1;
+    UserGrantEntrySetter entry_setter = 2;
+}
+
+message UserGrantEntrySetter {
+    StringValue project_id = 1;
+    StringValue project_grant_id = 2;
+    repeated UserGrantRoles roles = 3;
+}
+
+message UserGrantRoles {
+    oneof setter {
+        StringValue role = 1;
+        StringValueRangeSetter range = 2;
+    }
+}
+
+message StringValueRangeSetter {
+    string identifier = 1;
+    StringValue value = 2;
+}
