@@ -915,12 +915,17 @@ func (repo *AuthRequestRepo) getLoginTexts(ctx context.Context, aggregateID stri
 }
 
 func setOrgID(orgViewProvider orgViewProvider, request *domain.AuthRequest) error {
+	orgID := request.GetScopeOrgID()
 	primaryDomain := request.GetScopeOrgPrimaryDomain()
-	if primaryDomain == "" {
-		return nil
-	}
 
-	org, err := orgViewProvider.OrgByPrimaryDomain(primaryDomain)
+	org := new(org_view_model.OrgView)
+	var err error
+	if orgID != "" {
+		org, err = orgViewProvider.OrgByID(orgID)
+	}
+	if org == nil && primaryDomain != "" {
+		org, err = orgViewProvider.OrgByPrimaryDomain(primaryDomain)
+	}
 	if err != nil {
 		return err
 	}

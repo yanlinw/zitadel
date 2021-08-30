@@ -173,3 +173,15 @@ func (a *AuthRequest) GetScopeOrgPrimaryDomain() string {
 	}
 	return ""
 }
+
+func (a *AuthRequest) GetScopeOrgID() string {
+	switch request := a.Request.(type) {
+	case *AuthRequestOIDC:
+		for _, scope := range request.Scopes {
+			if strings.HasPrefix(scope, OrgIDScope) {
+				return strings.TrimPrefix(scope, OrgDomainPrimaryScope)
+			}
+		}
+	}
+	return ""
+}

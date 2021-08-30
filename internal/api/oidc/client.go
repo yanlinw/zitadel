@@ -91,9 +91,17 @@ func (o *OPStorage) ValidateJWTProfileScopes(ctx context.Context, subject string
 				orgID = org.ID
 			}
 			if orgID != user.ResourceOwner {
-				scopes[i] = scopes[len(scopes)-1]
-				scopes[len(scopes)-1] = ""
-				scopes = scopes[:len(scopes)-1]
+				scopes = removeScope(i, scopes)
+			}
+		}
+		if strings.HasPrefix(scope, authreq_model.OrgIDScope) {
+			var orgID string
+			org, err := o.repo.OrgByID(strings.TrimPrefix(scope, authreq_model.OrgIDScope))
+			if err == nil {
+				orgID = org.ID
+			}
+			if orgID != user.ResourceOwner {
+				scopes = removeScope(i, scopes)
 			}
 		}
 	}
@@ -181,6 +189,9 @@ func (o *OPStorage) SetUserinfoFromScopes(ctx context.Context, userInfo oidc.Use
 			if strings.HasPrefix(scope, model.OrgDomainPrimaryScope) {
 				userInfo.AppendClaims(model.OrgDomainPrimaryClaim, strings.TrimPrefix(scope, model.OrgDomainPrimaryScope))
 			}
+			if strings.HasPrefix(scope, model.OrgIDScope) {
+				userInfo.AppendClaims(model.OrgIDClaim, strings.TrimPrefix(scope, model.OrgIDScope))
+			}
 		}
 	}
 	userMetaData, err := o.assertUserMetaData(ctx, userID)
@@ -234,6 +245,8 @@ func (o *OPStorage) GetPrivateClaimsFromScopes(ctx context.Context, userID, clie
 			roles = append(roles, strings.TrimPrefix(scope, ScopeProjectRolePrefix))
 		} else if strings.HasPrefix(scope, model.OrgDomainPrimaryScope) {
 			claims = appendClaim(claims, model.OrgDomainPrimaryClaim, strings.TrimPrefix(scope, model.OrgDomainPrimaryScope))
+		} else if strings.HasPrefix(scope, model.OrgIDScope) {
+			claims = appendClaim(claims, model.OrgIDClaim, strings.TrimPrefix(scope, model.OrgIDScope))
 		}
 	}
 	if len(roles) == 0 || clientID == "" {
@@ -320,4 +333,11 @@ func appendClaim(claims map[string]interface{}, claim string, value interface{})
 	}
 	claims[claim] = value
 	return claims
+}
+
+func removeScope(i int, scopes []string) []string {
+	scopes[i] = scopes[len(scopes)-1]
+	scopes[len(scopes)-1] = ""
+	scopes = scopes[:len(scopes)-1]
+	return scopes
 }

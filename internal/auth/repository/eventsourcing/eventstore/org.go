@@ -64,6 +64,14 @@ func (repo *OrgRepository) OrgByPrimaryDomain(primaryDomain string) (*org_model.
 	return model.OrgToModel(org), nil
 }
 
+func (repo *OrgRepository) OrgByID(id string) (*org_model.OrgView, error) {
+	org, err := repo.View.OrgByID(id)
+	if err != nil {
+		return nil, err
+	}
+	return model.OrgToModel(org), nil
+}
+
 func (repo *OrgRepository) GetDefaultOrgIAMPolicy(ctx context.Context) (*iam_model.OrgIAMPolicyView, error) {
 	orgPolicy, err := repo.View.OrgIAMPolicyByAggregateID(repo.SystemDefaults.IamID)
 	if err != nil {

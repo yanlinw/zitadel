@@ -3,6 +3,8 @@ package domain
 const (
 	OrgDomainPrimaryScope = "urn:zitadel:iam:org:domain:primary:"
 	OrgDomainPrimaryClaim = "urn:zitadel:iam:org:domain:primary"
+	OrgIDScope            = "urn:zitadel:iam:org:id:"
+	OrgIDClaim            = "urn:zitadel:iam:org:id"
 	ProjectIDScope        = "urn:zitadel:iam:org:project:id:"
 	AudSuffix             = ":aud"
 )
