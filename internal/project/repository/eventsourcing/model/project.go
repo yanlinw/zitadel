@@ -5,6 +5,7 @@ import (
 
 	"github.com/caos/logging"
 
+	"github.com/caos/zitadel/internal/domain"
 	es_models "github.com/caos/zitadel/internal/eventstore/v1/models"
 	"github.com/caos/zitadel/internal/project/model"
 )
@@ -15,20 +16,25 @@ const (
 
 type Project struct {
 	es_models.ObjectRoot
-	Name                 string `json:"name,omitempty"`
-	ProjectRoleAssertion bool   `json:"projectRoleAssertion,omitempty"`
-	ProjectRoleCheck     bool   `json:"projectRoleCheck,omitempty"`
-	HasProjectCheck      bool   `json:"hasProjectCheck,omitempty"`
-	State                int32  `json:"-"`
+	Name                           string `json:"name,omitempty"`
+	ProjectRoleAssertion           bool   `json:"projectRoleAssertion,omitempty"`
+	ProjectRoleCheck               bool   `json:"projectRoleCheck,omitempty"`
+	HasProjectCheck                bool   `json:"hasProjectCheck,omitempty"`
+	RegisterOnProjectResourceOwner bool   `json:"registerOnProjectResourceOwner,omitempty"`
+	PrivateLabelingSetting         int32  `json:"privateLabelingSetting,omitempty"`
+	State                          int32  `json:"-"`
 }
 
 func ProjectToModel(project *Project) *model.Project {
 	return &model.Project{
-		ObjectRoot:           project.ObjectRoot,
-		Name:                 project.Name,
-		ProjectRoleAssertion: project.ProjectRoleAssertion,
-		ProjectRoleCheck:     project.ProjectRoleCheck,
-		State:                model.ProjectState(project.State),
+		ObjectRoot:                     project.ObjectRoot,
+		Name:                           project.Name,
+		ProjectRoleAssertion:           project.ProjectRoleAssertion,
+		ProjectRoleCheck:               project.ProjectRoleCheck,
+		HasProjectCheck:                project.HasProjectCheck,
+		RegisterOnProjectResourceOwner: project.RegisterOnProjectResourceOwner,
+		PrivateLabelingSetting:         domain.PrivateLabelingSetting(project.PrivateLabelingSetting),
+		State:                          model.ProjectState(project.State),
 	}
 }
 

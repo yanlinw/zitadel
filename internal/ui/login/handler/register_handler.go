@@ -69,10 +69,13 @@ func (l *Login) handleRegisterCheck(w http.ResponseWriter, r *http.Request) {
 
 	resourceOwner := iam.GlobalOrgID
 	memberRoles := []string{domain.RoleOrgProjectCreator}
-
 	if authRequest.RequestedOrgID != "" && authRequest.RequestedOrgID != iam.GlobalOrgID {
 		memberRoles = nil
 		resourceOwner = authRequest.RequestedOrgID
+	}
+	if authRequest.RegisterOnProjectResourceOwner && authRequest.ApplicationResourceOwner != "" {
+		memberRoles = nil
+		resourceOwner = authRequest.ApplicationResourceOwner
 	}
 	user, err := l.command.RegisterHuman(setContext(r.Context(), resourceOwner), resourceOwner, data.toHumanDomain(), nil, memberRoles)
 	if err != nil {

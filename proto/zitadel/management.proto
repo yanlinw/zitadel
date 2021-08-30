@@ -3450,10 +3450,16 @@ message ListProjectChangesResponse {
 
 message AddProjectRequest {
     string name = 1 [(validate.rules).string = {min_len: 1, max_len: 200}];
+    // describes if roles of user should be added in token
     bool project_role_assertion = 2;
+    // ZITADEL checks if the user has at least one on this project
     bool project_role_check = 3;
+    // ZITADEL checks if the org of the user has permission to this project
     bool has_project_check = 4;
+    // Defines from where the private labeling should be triggered
     zitadel.project.v1.PrivateLabelingSetting private_labeling_setting = 5 [(validate.rules).enum = {defined_only: true}];
+    // If set a user will be registered on the projects resource owner instead of global organisation
+    bool register_on_project_resource_owner = 9;
 }
 
 message AddProjectResponse {
@@ -3464,10 +3470,16 @@ message AddProjectResponse {
 message UpdateProjectRequest {
     string id = 1 [(validate.rules).string = {min_len: 1, max_len: 200}];
     string name = 2 [(validate.rules).string = {min_len: 1, max_len: 200}];
+    // describes if roles of user should be added in token
     bool project_role_assertion = 3;
+    // ZITADEL checks if the user has at least one on this project
     bool project_role_check = 4;
+    // ZITADEL checks if the org of the user has permission to this project
     bool has_project_check = 5;
+    // Defines from where the private labeling should be triggered
     zitadel.project.v1.PrivateLabelingSetting private_labeling_setting = 6 [(validate.rules).enum = {defined_only: true}];
+    // If set a user will be registered on the projects resource owner instead of global organisation
+    bool register_on_project_resource_owner = 9;
 }
 
 message UpdateProjectResponse {

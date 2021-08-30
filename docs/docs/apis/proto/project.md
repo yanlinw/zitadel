@@ -67,6 +67,7 @@ title: zitadel/project.proto
 | project_role_check |  bool | ZITADEL checks if the user has at least one on this project |  |
 | has_project_check |  bool | ZITADEL checks if the org of the user has permission to this project |  |
 | private_labeling_setting |  PrivateLabelingSetting | Defines from where the private labeling should be triggered |  |
+| register_on_project_resource_owner |  bool | If set a user will be registered on the projects resource owner instead of global organisation |  |
 
 
 

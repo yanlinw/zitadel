@@ -3274,10 +3274,11 @@ This is an empty request
 | Field | Type | Description | Validation |
 | ----- | ---- | ----------- | ----------- |
 | name |  string | - | string.min_len: 1<br /> string.max_len: 200<br />  |
-| project_role_assertion |  bool | - |  |
-| project_role_check |  bool | - |  |
-| has_project_check |  bool | - |  |
-| private_labeling_setting |  zitadel.project.v1.PrivateLabelingSetting | - | enum.defined_only: true<br />  |
+| project_role_assertion |  bool | describes if roles of user should be added in token |  |
+| project_role_check |  bool | ZITADEL checks if the user has at least one on this project |  |
+| has_project_check |  bool | ZITADEL checks if the org of the user has permission to this project |  |
+| private_labeling_setting |  zitadel.project.v1.PrivateLabelingSetting | Defines from where the private labeling should be triggered | enum.defined_only: true<br />  |
+| register_on_project_resource_owner |  bool | If set a user will be registered on the projects resource owner instead of global organisation |  |
 
 
 
@@ -7520,10 +7521,11 @@ This is an empty request
 | ----- | ---- | ----------- | ----------- |
 | id |  string | - | string.min_len: 1<br /> string.max_len: 200<br />  |
 | name |  string | - | string.min_len: 1<br /> string.max_len: 200<br />  |
-| project_role_assertion |  bool | - |  |
-| project_role_check |  bool | - |  |
-| has_project_check |  bool | - |  |
-| private_labeling_setting |  zitadel.project.v1.PrivateLabelingSetting | - | enum.defined_only: true<br />  |
+| project_role_assertion |  bool | describes if roles of user should be added in token |  |
+| project_role_check |  bool | ZITADEL checks if the user has at least one on this project |  |
+| has_project_check |  bool | ZITADEL checks if the org of the user has permission to this project |  |
+| private_labeling_setting |  zitadel.project.v1.PrivateLabelingSetting | Defines from where the private labeling should be triggered | enum.defined_only: true<br />  |
+| register_on_project_resource_owner |  bool | If set a user will be registered on the projects resource owner instead of global organisation |  |
 
 
 

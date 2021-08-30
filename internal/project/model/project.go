@@ -10,16 +10,17 @@ import (
 type Project struct {
 	es_models.ObjectRoot
 
-	State                  ProjectState
-	Name                   string
-	Members                []*ProjectMember
-	Roles                  []*ProjectRole
-	Applications           []*Application
-	Grants                 []*ProjectGrant
-	ProjectRoleAssertion   bool
-	ProjectRoleCheck       bool
-	HasProjectCheck        bool
-	PrivateLabelingSetting domain.PrivateLabelingSetting
+	State                          ProjectState
+	Name                           string
+	Members                        []*ProjectMember
+	Roles                          []*ProjectRole
+	Applications                   []*Application
+	Grants                         []*ProjectGrant
+	ProjectRoleAssertion           bool
+	ProjectRoleCheck               bool
+	HasProjectCheck                bool
+	RegisterOnProjectResourceOwner bool
+	PrivateLabelingSetting         domain.PrivateLabelingSetting
 }
 type ProjectChanges struct {
 	Changes      []*ProjectChange

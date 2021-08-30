@@ -125,6 +125,7 @@ func (repo *AuthRequestRepo) CreateAuthRequest(ctx context.Context, request *dom
 	request.Audience = appIDs
 	request.AppendAudIfNotExisting(app.ProjectID)
 	request.ApplicationResourceOwner = app.ResourceOwner
+	request.RegisterOnProjectResourceOwner = app.RegisterOnProjectResourceOwner
 	request.PrivateLabelingSetting = app.PrivateLabelingSetting
 	if err := setOrgID(repo.OrgViewProvider, request); err != nil {
 		return nil, err

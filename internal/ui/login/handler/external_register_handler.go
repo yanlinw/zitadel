@@ -174,6 +174,11 @@ func (l *Login) handleExternalRegisterCheck(w http.ResponseWriter, r *http.Reque
 		memberRoles = nil
 		resourceOwner = authReq.RequestedOrgID
 	}
+	if authReq.RegisterOnProjectResourceOwner && authReq.ApplicationResourceOwner != "" {
+		memberRoles = nil
+		resourceOwner = authReq.ApplicationResourceOwner
+	}
+
 	externalIDP, err := l.getExternalIDP(data)
 	if externalIDP == nil {
 		l.renderRegisterOption(w, r, authReq, err)

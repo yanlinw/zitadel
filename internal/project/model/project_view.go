@@ -8,17 +8,18 @@ import (
 )
 
 type ProjectView struct {
-	ProjectID              string
-	Name                   string
-	CreationDate           time.Time
-	ChangeDate             time.Time
-	State                  ProjectState
-	ResourceOwner          string
-	ProjectRoleAssertion   bool
-	ProjectRoleCheck       bool
-	HasProjectCheck        bool
-	PrivateLabelingSetting domain.PrivateLabelingSetting
-	Sequence               uint64
+	ProjectID                      string
+	Name                           string
+	CreationDate                   time.Time
+	ChangeDate                     time.Time
+	State                          ProjectState
+	ResourceOwner                  string
+	ProjectRoleAssertion           bool
+	ProjectRoleCheck               bool
+	HasProjectCheck                bool
+	RegisterOnProjectResourceOwner bool
+	PrivateLabelingSetting         domain.PrivateLabelingSetting
+	Sequence                       uint64
 }
 
 type ProjectViewSearchRequest struct {

@@ -13,11 +13,12 @@ import (
 
 func ProjectCreateToDomain(req *mgmt_pb.AddProjectRequest) *domain.Project {
 	return &domain.Project{
-		Name:                   req.Name,
-		ProjectRoleAssertion:   req.ProjectRoleAssertion,
-		ProjectRoleCheck:       req.ProjectRoleCheck,
-		HasProjectCheck:        req.HasProjectCheck,
-		PrivateLabelingSetting: privateLabelingSettingToDomain(req.PrivateLabelingSetting),
+		Name:                           req.Name,
+		ProjectRoleAssertion:           req.ProjectRoleAssertion,
+		ProjectRoleCheck:               req.ProjectRoleCheck,
+		HasProjectCheck:                req.HasProjectCheck,
+		PrivateLabelingSetting:         privateLabelingSettingToDomain(req.PrivateLabelingSetting),
+		RegisterOnProjectResourceOwner: req.RegisterOnProjectResourceOwner,
 	}
 }
 
@@ -26,11 +27,12 @@ func ProjectUpdateToDomain(req *mgmt_pb.UpdateProjectRequest) *domain.Project {
 		ObjectRoot: models.ObjectRoot{
 			AggregateID: req.Id,
 		},
-		Name:                   req.Name,
-		ProjectRoleAssertion:   req.ProjectRoleAssertion,
-		ProjectRoleCheck:       req.ProjectRoleCheck,
-		HasProjectCheck:        req.HasProjectCheck,
-		PrivateLabelingSetting: privateLabelingSettingToDomain(req.PrivateLabelingSetting),
+		Name:                           req.Name,
+		ProjectRoleAssertion:           req.ProjectRoleAssertion,
+		ProjectRoleCheck:               req.ProjectRoleCheck,
+		HasProjectCheck:                req.HasProjectCheck,
+		PrivateLabelingSetting:         privateLabelingSettingToDomain(req.PrivateLabelingSetting),
+		RegisterOnProjectResourceOwner: req.RegisterOnProjectResourceOwner,
 	}
 }
 

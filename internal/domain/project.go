@@ -7,12 +7,13 @@ import (
 type Project struct {
 	models.ObjectRoot
 
-	State                  ProjectState
-	Name                   string
-	ProjectRoleAssertion   bool
-	ProjectRoleCheck       bool
-	HasProjectCheck        bool
-	PrivateLabelingSetting PrivateLabelingSetting
+	State                          ProjectState
+	Name                           string
+	ProjectRoleAssertion           bool
+	ProjectRoleCheck               bool
+	HasProjectCheck                bool
+	PrivateLabelingSetting         PrivateLabelingSetting
+	RegisterOnProjectResourceOwner bool
 }
 
 type ProjectState int32

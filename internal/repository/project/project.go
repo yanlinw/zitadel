@@ -37,11 +37,12 @@ func NewRemoveProjectNameUniqueConstraint(projectName, resourceOwner string) *ev
 type ProjectAddedEvent struct {
 	eventstore.BaseEvent `json:"-"`
 
-	Name                   string                        `json:"name,omitempty"`
-	ProjectRoleAssertion   bool                          `json:"projectRoleAssertion,omitempty"`
-	ProjectRoleCheck       bool                          `json:"projectRoleCheck,omitempty"`
-	HasProjectCheck        bool                          `json:"hasProjectCheck,omitempty"`
-	PrivateLabelingSetting domain.PrivateLabelingSetting `json:"privateLabelingSetting,omitempty"`
+	Name                           string                        `json:"name,omitempty"`
+	ProjectRoleAssertion           bool                          `json:"projectRoleAssertion,omitempty"`
+	ProjectRoleCheck               bool                          `json:"projectRoleCheck,omitempty"`
+	HasProjectCheck                bool                          `json:"hasProjectCheck,omitempty"`
+	RegisterOnProjectResourceOwner bool                          `json:"registerOnProjectResourceOwner,omitempty"`
+	PrivateLabelingSetting         domain.PrivateLabelingSetting `json:"privateLabelingSetting,omitempty"`
 }
 
 func (e *ProjectAddedEvent) Data() interface{} {
@@ -58,7 +59,8 @@ func NewProjectAddedEvent(
 	name string,
 	projectRoleAssertion,
 	projectRoleCheck,
-	hasProjectCheck bool,
+	hasProjectCheck,
+	registerOnProjectResourceOwner bool,
 	privateLabelingSetting domain.PrivateLabelingSetting,
 ) *ProjectAddedEvent {
 	return &ProjectAddedEvent{
@@ -67,11 +69,12 @@ func NewProjectAddedEvent(
 			aggregate,
 			ProjectAddedType,
 		),
-		Name:                   name,
-		ProjectRoleAssertion:   projectRoleAssertion,
-		ProjectRoleCheck:       projectRoleCheck,
-		HasProjectCheck:        hasProjectCheck,
-		PrivateLabelingSetting: privateLabelingSetting,
+		Name:                           name,
+		ProjectRoleAssertion:           projectRoleAssertion,
+		ProjectRoleCheck:               projectRoleCheck,
+		HasProjectCheck:                hasProjectCheck,
+		PrivateLabelingSetting:         privateLabelingSetting,
+		RegisterOnProjectResourceOwner: registerOnProjectResourceOwner,
 	}
 }
 
@@ -91,12 +94,13 @@ func ProjectAddedEventMapper(event *repository.Event) (eventstore.EventReader, e
 type ProjectChangeEvent struct {
 	eventstore.BaseEvent `json:"-"`
 
-	Name                   *string                        `json:"name,omitempty"`
-	ProjectRoleAssertion   *bool                          `json:"projectRoleAssertion,omitempty"`
-	ProjectRoleCheck       *bool                          `json:"projectRoleCheck,omitempty"`
-	HasProjectCheck        *bool                          `json:"hasProjectCheck,omitempty"`
-	PrivateLabelingSetting *domain.PrivateLabelingSetting `json:"privateLabelingSetting,omitempty"`
-	oldName                string
+	Name                           *string                        `json:"name,omitempty"`
+	ProjectRoleAssertion           *bool                          `json:"projectRoleAssertion,omitempty"`
+	ProjectRoleCheck               *bool                          `json:"projectRoleCheck,omitempty"`
+	HasProjectCheck                *bool                          `json:"hasProjectCheck,omitempty"`
+	RegisterOnProjectResourceOwner *bool                          `json:"registerOnProjectResourceOwner,omitempty"`
+	PrivateLabelingSetting         *domain.PrivateLabelingSetting `json:"privateLabelingSetting,omitempty"`
+	oldName                        string
 }
 
 func (e *ProjectChangeEvent) Data() interface{} {
@@ -159,6 +163,12 @@ func ChangeProjectRoleCheck(projectRoleCheck bool) func(event *ProjectChangeEven
 func ChangeHasProjectCheck(ChangeHasProjectCheck bool) func(event *ProjectChangeEvent) {
 	return func(e *ProjectChangeEvent) {
 		e.HasProjectCheck = &ChangeHasProjectCheck
+	}
+}
+
+func ChangeRegisterOnProjectResourceOwner(RegisterOnProjectResourceOwner bool) func(event *ProjectChangeEvent) {
+	return func(e *ProjectChangeEvent) {
+		e.RegisterOnProjectResourceOwner = &RegisterOnProjectResourceOwner
 	}
 }
 
