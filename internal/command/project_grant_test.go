@@ -87,7 +87,7 @@ func TestCommandSide_AddProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -117,7 +117,7 @@ func TestCommandSide_AddProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -154,7 +154,7 @@ func TestCommandSide_AddProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -344,7 +344,7 @@ func TestCommandSide_ChangeProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -383,7 +383,7 @@ func TestCommandSide_ChangeProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -429,7 +429,7 @@ func TestCommandSide_ChangeProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -483,7 +483,7 @@ func TestCommandSide_ChangeProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -563,7 +563,7 @@ func TestCommandSide_ChangeProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -645,7 +645,7 @@ func TestCommandSide_ChangeProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -822,7 +822,7 @@ func TestCommandSide_DeactivateProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -849,7 +849,7 @@ func TestCommandSide_DeactivateProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -887,7 +887,7 @@ func TestCommandSide_DeactivateProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -1021,7 +1021,7 @@ func TestCommandSide_ReactivateProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -1048,7 +1048,7 @@ func TestCommandSide_ReactivateProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -1082,7 +1082,7 @@ func TestCommandSide_ReactivateProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -1221,7 +1221,7 @@ func TestCommandSide_RemoveProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -1248,7 +1248,7 @@ func TestCommandSide_RemoveProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -1294,7 +1294,7 @@ func TestCommandSide_RemoveProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -1342,7 +1342,7 @@ func TestCommandSide_RemoveProjectGrant(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),

@@ -41,7 +41,7 @@ func TestCommandSide_AddProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -77,7 +77,7 @@ func TestCommandSide_AddProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -106,7 +106,7 @@ func TestCommandSide_AddProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -151,7 +151,7 @@ func TestCommandSide_AddProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -244,7 +244,7 @@ func TestCommandSide_BulkAddProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -282,7 +282,7 @@ func TestCommandSide_BulkAddProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -315,7 +315,7 @@ func TestCommandSide_BulkAddProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -374,7 +374,7 @@ func TestCommandSide_BulkAddProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -494,7 +494,7 @@ func TestCommandSide_ChangeProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -530,7 +530,7 @@ func TestCommandSide_ChangeProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -578,7 +578,7 @@ func TestCommandSide_ChangeProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
@@ -620,7 +620,7 @@ func TestCommandSide_ChangeProjectRole(t *testing.T) {
 						eventFromEventPusher(
 							project.NewProjectAddedEvent(context.Background(),
 								&project.NewAggregate("project1", "org1").Aggregate,
-								"projectname1", true, true, true,
+								"projectname1", true, true, true, true,
 								domain.PrivateLabelingSettingUnspecified,
 							),
 						),
