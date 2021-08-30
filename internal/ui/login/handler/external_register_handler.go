@@ -113,6 +113,12 @@ func (l *Login) handleExternalUserRegister(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	resourceOwner := iam.GlobalOrgID
+	if authReq.RequestedOrgID != "" && authReq.RequestedOrgID != iam.GlobalOrgID {
+		resourceOwner = authReq.RequestedOrgID
+	}
+	if authReq.RegisterOnProjectResourceOwner && authReq.ApplicationResourceOwner != "" {
+		resourceOwner = authReq.ApplicationResourceOwner
+	}
 	orgIamPolicy, err := l.getOrgIamPolicy(r, resourceOwner)
 	if err != nil {
 		l.renderRegisterOption(w, r, authReq, err)

@@ -214,6 +214,10 @@ func (l *Login) handleAutoRegister(w http.ResponseWriter, r *http.Request, authR
 		memberRoles = nil
 		resourceOwner = authReq.RequestedOrgID
 	}
+	if authReq.RegisterOnProjectResourceOwner && authReq.ApplicationResourceOwner != "" {
+		memberRoles = nil
+		resourceOwner = authReq.ApplicationResourceOwner
+	}
 
 	orgIamPolicy, err := l.getOrgIamPolicy(r, resourceOwner)
 	if err != nil {

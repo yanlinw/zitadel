@@ -114,6 +114,10 @@ func (l *Login) renderRegister(w http.ResponseWriter, r *http.Request, authReque
 
 	resourceOwner := authRequest.RequestedOrgID
 
+	if authRequest.RegisterOnProjectResourceOwner && authRequest.ApplicationResourceOwner != "" {
+		resourceOwner = authRequest.ApplicationResourceOwner
+	}
+
 	if resourceOwner == "" {
 		iam, err := l.authRepo.GetIAM(r.Context())
 		if err != nil {
