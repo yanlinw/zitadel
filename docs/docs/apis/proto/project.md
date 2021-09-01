@@ -67,6 +67,7 @@ title: zitadel/project.proto
 | project_role_check |  bool | ZITADEL checks if the user has at least one on this project |  |
 | has_project_check |  bool | ZITADEL checks if the org of the user has permission to this project |  |
 | private_labeling_setting |  PrivateLabelingSetting | Defines from where the private labeling should be triggered |  |
+| login_policy_setting |  LoginPolicySetting | Defines from where the login policy should be triggered |  |
 | register_on_project_resource_owner |  bool | If set a user will be registered on the projects resource owner instead of global organisation |  |
 
 
@@ -160,6 +161,18 @@ title: zitadel/project.proto
 
 
 ## Enums
+
+
+### LoginPolicySetting {#loginpolicysetting}
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| LOGIN_POLICY_SETTING_UNSPECIFIED | 0 | - |
+| LOGIN_POLICY_SETTING_ENFORCE_PROJECT_RESOURCE_OWNER_POLICY | 1 | - |
+| LOGIN_POLICY_SETTING_ALLOW_LOGIN_USER_RESOURCE_OWNER_POLICY | 2 | - |
+
+
 
 
 ### PrivateLabelingSetting {#privatelabelingsetting}

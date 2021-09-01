@@ -31,6 +31,7 @@ type ProjectView struct {
 	HasProjectCheck                bool                          `json:"hasProjectCheck" gorm:"column:has_project_check"`
 	RegisterOnProjectResourceOwner bool                          `json:"registerOnProjectResourceOwner" gorm:"column:register_on_project_resource_owner"`
 	PrivateLabelingSetting         domain.PrivateLabelingSetting `json:"privateLabelingSetting" gorm:"column:private_labeling_setting"`
+	LoginPolicySetting             domain.LoginPolicySetting     `json:"loginPolicySetting" gorm:"column:login_policy_setting"`
 	Sequence                       uint64                        `json:"-" gorm:"column:sequence"`
 }
 
@@ -47,6 +48,7 @@ func ProjectToModel(project *ProjectView) *model.ProjectView {
 		HasProjectCheck:                project.HasProjectCheck,
 		RegisterOnProjectResourceOwner: project.RegisterOnProjectResourceOwner,
 		PrivateLabelingSetting:         project.PrivateLabelingSetting,
+		LoginPolicySetting:             project.LoginPolicySetting,
 		Sequence:                       project.Sequence,
 	}
 }

@@ -33,8 +33,10 @@ message Project {
     bool has_project_check = 7;
     // Defines from where the private labeling should be triggered
     PrivateLabelingSetting private_labeling_setting = 8;
+    // Defines from where the login policy should be triggered
+    LoginPolicySetting login_policy_setting = 9;
     // If set a user will be registered on the projects resource owner instead of global organisation
-    bool register_on_project_resource_owner = 9;
+    bool register_on_project_resource_owner = 10;
 }
 
 message GrantedProject {
@@ -98,6 +100,12 @@ enum PrivateLabelingSetting {
     PRIVATE_LABELING_SETTING_UNSPECIFIED = 0;
     PRIVATE_LABELING_SETTING_ENFORCE_PROJECT_RESOURCE_OWNER_POLICY = 1;
     PRIVATE_LABELING_SETTING_ALLOW_LOGIN_USER_RESOURCE_OWNER_POLICY = 2;
+}
+
+enum LoginPolicySetting {
+    LOGIN_POLICY_SETTING_UNSPECIFIED = 0;
+    LOGIN_POLICY_SETTING_ENFORCE_PROJECT_RESOURCE_OWNER_POLICY = 1;
+    LOGIN_POLICY_SETTING_ALLOW_LOGIN_USER_RESOURCE_OWNER_POLICY = 2;
 }
 
 enum ProjectGrantState {

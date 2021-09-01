@@ -3458,8 +3458,10 @@ message AddProjectRequest {
     bool has_project_check = 4;
     // Defines from where the private labeling should be triggered
     zitadel.project.v1.PrivateLabelingSetting private_labeling_setting = 5 [(validate.rules).enum = {defined_only: true}];
+    // Defines from where the login policy should be triggered
+    zitadel.project.v1.LoginPolicySetting login_policy_setting = 6 [(validate.rules).enum = {defined_only: true}];
     // If set a user will be registered on the projects resource owner instead of global organisation
-    bool register_on_project_resource_owner = 9;
+    bool register_on_project_resource_owner = 7;
 }
 
 message AddProjectResponse {
@@ -3478,8 +3480,10 @@ message UpdateProjectRequest {
     bool has_project_check = 5;
     // Defines from where the private labeling should be triggered
     zitadel.project.v1.PrivateLabelingSetting private_labeling_setting = 6 [(validate.rules).enum = {defined_only: true}];
+    // Defines from where the login policy should be triggered
+    zitadel.project.v1.LoginPolicySetting login_policy_setting = 7 [(validate.rules).enum = {defined_only: true}];
     // If set a user will be registered on the projects resource owner instead of global organisation
-    bool register_on_project_resource_owner = 9;
+    bool register_on_project_resource_owner = 8;
 }
 
 message UpdateProjectResponse {

@@ -19,6 +19,7 @@ type ProjectView struct {
 	HasProjectCheck                bool
 	RegisterOnProjectResourceOwner bool
 	PrivateLabelingSetting         domain.PrivateLabelingSetting
+	LoginPolicySetting             domain.LoginPolicySetting
 	Sequence                       uint64
 }
 

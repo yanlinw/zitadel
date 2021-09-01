@@ -127,6 +127,7 @@ func (repo *AuthRequestRepo) CreateAuthRequest(ctx context.Context, request *dom
 	request.ApplicationResourceOwner = app.ResourceOwner
 	request.RegisterOnProjectResourceOwner = app.RegisterOnProjectResourceOwner
 	request.PrivateLabelingSetting = app.PrivateLabelingSetting
+	request.LoginPolicySetting = app.LoginPolicySetting
 	if err := setOrgID(repo.OrgViewProvider, request); err != nil {
 		return nil, err
 	}
@@ -487,15 +488,16 @@ func (repo *AuthRequestRepo) getLoginPolicyAndIDPProviders(ctx context.Context, 
 }
 
 func (repo *AuthRequestRepo) fillPolicies(ctx context.Context, request *domain.AuthRequest) error {
-	orgID := request.RequestedOrgID
-	if orgID == "" {
-		orgID = request.UserOrgID
+	loginPolicyOrgID := domain.IAMID
+	if request.LoginPolicySetting != domain.LoginPolicySettingUnspecified {
+		loginPolicyOrgID = request.ApplicationResourceOwner
 	}
-	if orgID == "" {
-		orgID = repo.IAMID
+	if request.LoginPolicySetting == domain.LoginPolicySettingAllowLoginUserResourceOwnerPolicy || request.LoginPolicySetting == domain.LoginPolicySettingUnspecified {
+		if request.UserOrgID != "" {
+			loginPolicyOrgID = request.UserOrgID
+		}
 	}
-
-	loginPolicy, idpProviders, err := repo.getLoginPolicyAndIDPProviders(ctx, orgID)
+	loginPolicy, idpProviders, err := repo.getLoginPolicyAndIDPProviders(ctx, loginPolicyOrgID)
 	if err != nil {
 		return err
 	}
@@ -503,15 +505,16 @@ func (repo *AuthRequestRepo) fillPolicies(ctx context.Context, request *domain.A
 	if idpProviders != nil {
 		request.AllowedExternalIDPs = idpProviders
 	}
-	lockoutPolicy, err := repo.getLockoutPolicy(ctx, orgID)
+	lockoutPolicy, err := repo.getLockoutPolicy(ctx, loginPolicyOrgID)
 	if err != nil {
 		return err
 	}
 	request.LockoutPolicy = lockoutPolicy
-	privacyPolicy, err := repo.getPrivacyPolicy(ctx, orgID)
+	privacyPolicy, err := repo.getPrivacyPolicy(ctx, loginPolicyOrgID)
 	if err != nil {
 		return err
 	}
+
 	request.PrivacyPolicy = privacyPolicy
 	privateLabelingOrgID := domain.IAMID
 	if request.PrivateLabelingSetting != domain.PrivateLabelingSettingUnspecified {
@@ -532,7 +535,7 @@ func (repo *AuthRequestRepo) fillPolicies(ctx context.Context, request *domain.A
 		return err
 	}
 	request.DefaultTranslations = defaultLoginTranslations
-	orgLoginTranslations, err := repo.getLoginTexts(ctx, orgID)
+	orgLoginTranslations, err := repo.getLoginTexts(ctx, privateLabelingOrgID)
 	if err != nil {
 		return err
 	}

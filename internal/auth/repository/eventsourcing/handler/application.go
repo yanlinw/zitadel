@@ -86,6 +86,7 @@ func (a *Application) Reduce(event *models.Event) (err error) {
 		app.HasProjectCheck = project.HasProjectCheck
 		app.RegisterOnProjectResourceOwner = project.RegisterOnProjectResourceOwner
 		app.PrivateLabelingSetting = project.PrivateLabelingSetting
+		app.LoginPolicySetting = project.LoginPolicySetting
 
 		err = app.AppendEvent(event)
 	case es_model.ApplicationChanged,

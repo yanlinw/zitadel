@@ -17,6 +17,7 @@ type ProjectWriteModel struct {
 	HasProjectCheck                bool
 	RegisterOnProjectResourceOwner bool
 	PrivateLabelingSetting         domain.PrivateLabelingSetting
+	LoginPolicySetting             domain.LoginPolicySetting
 	State                          domain.ProjectState
 }
 
@@ -39,6 +40,7 @@ func (wm *ProjectWriteModel) Reduce() error {
 			wm.HasProjectCheck = e.HasProjectCheck
 			wm.RegisterOnProjectResourceOwner = e.RegisterOnProjectResourceOwner
 			wm.PrivateLabelingSetting = e.PrivateLabelingSetting
+			wm.LoginPolicySetting = e.LoginPolicySetting
 			wm.State = domain.ProjectStateActive
 		case *project.ProjectChangeEvent:
 			if e.Name != nil {
@@ -58,6 +60,9 @@ func (wm *ProjectWriteModel) Reduce() error {
 			}
 			if e.PrivateLabelingSetting != nil {
 				wm.PrivateLabelingSetting = *e.PrivateLabelingSetting
+			}
+			if e.LoginPolicySetting != nil {
+				wm.LoginPolicySetting = *e.LoginPolicySetting
 			}
 		case *project.ProjectDeactivatedEvent:
 			if wm.State == domain.ProjectStateRemoved {
@@ -99,6 +104,7 @@ func (wm *ProjectWriteModel) NewChangedEvent(
 	hasProjectCheck,
 	registerOnProjectResourceOwner bool,
 	privateLabelingSetting domain.PrivateLabelingSetting,
+	loginPolicySetting domain.LoginPolicySetting,
 ) (*project.ProjectChangeEvent, bool, error) {
 	changes := make([]project.ProjectChanges, 0)
 	var err error
@@ -122,6 +128,9 @@ func (wm *ProjectWriteModel) NewChangedEvent(
 	}
 	if wm.PrivateLabelingSetting != privateLabelingSetting {
 		changes = append(changes, project.ChangePrivateLabelingSetting(privateLabelingSetting))
+	}
+	if wm.LoginPolicySetting != loginPolicySetting {
+		changes = append(changes, project.ChangeLoginPolicySetting(loginPolicySetting))
 	}
 	if len(changes) == 0 {
 		return nil, false, nil

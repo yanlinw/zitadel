@@ -53,7 +53,8 @@ func (c *Commands) addProject(ctx context.Context, projectAdd *domain.Project, r
 			projectAdd.ProjectRoleCheck,
 			projectAdd.HasProjectCheck,
 			projectAdd.RegisterOnProjectResourceOwner,
-			projectAdd.PrivateLabelingSetting),
+			projectAdd.PrivateLabelingSetting,
+			projectAdd.LoginPolicySetting),
 		project.NewProjectMemberAddedEvent(ctx, projectAgg, ownerUserID, projectRole),
 	}
 	return events, addedProject, nil
@@ -103,7 +104,8 @@ func (c *Commands) ChangeProject(ctx context.Context, projectChange *domain.Proj
 		projectChange.ProjectRoleCheck,
 		projectChange.HasProjectCheck,
 		projectChange.RegisterOnProjectResourceOwner,
-		projectChange.PrivateLabelingSetting)
+		projectChange.PrivateLabelingSetting,
+		projectChange.LoginPolicySetting)
 	if err != nil {
 		return nil, err
 	}

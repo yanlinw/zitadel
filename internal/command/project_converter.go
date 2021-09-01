@@ -13,6 +13,7 @@ func projectWriteModelToProject(writeModel *ProjectWriteModel) *domain.Project {
 		HasProjectCheck:                writeModel.HasProjectCheck,
 		RegisterOnProjectResourceOwner: writeModel.RegisterOnProjectResourceOwner,
 		PrivateLabelingSetting:         writeModel.PrivateLabelingSetting,
+		LoginPolicySetting:             writeModel.LoginPolicySetting,
 	}
 }
 

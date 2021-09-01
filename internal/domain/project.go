@@ -13,6 +13,7 @@ type Project struct {
 	ProjectRoleCheck               bool
 	HasProjectCheck                bool
 	PrivateLabelingSetting         PrivateLabelingSetting
+	LoginPolicySetting             LoginPolicySetting
 	RegisterOnProjectResourceOwner bool
 }
 
@@ -31,6 +32,14 @@ const (
 	PrivateLabelingSettingUnspecified PrivateLabelingSetting = iota
 	PrivateLabelingSettingEnforceProjectResourceOwnerPolicy
 	PrivateLabelingSettingAllowLoginUserResourceOwnerPolicy
+)
+
+type LoginPolicySetting int32
+
+const (
+	LoginPolicySettingUnspecified LoginPolicySetting = iota
+	LoginPolicySettingEnforceProjectResourceOwnerPolicy
+	LoginPolicySettingAllowLoginUserResourceOwnerPolicy
 )
 
 func (o *Project) IsValid() bool {

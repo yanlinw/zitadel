@@ -22,6 +22,7 @@ type Project struct {
 	HasProjectCheck                bool   `json:"hasProjectCheck,omitempty"`
 	RegisterOnProjectResourceOwner bool   `json:"registerOnProjectResourceOwner,omitempty"`
 	PrivateLabelingSetting         int32  `json:"privateLabelingSetting,omitempty"`
+	LoginPolicySetting             int32  `json:"loginPolicySetting,omitempty"`
 	State                          int32  `json:"-"`
 }
 
@@ -34,6 +35,7 @@ func ProjectToModel(project *Project) *model.Project {
 		HasProjectCheck:                project.HasProjectCheck,
 		RegisterOnProjectResourceOwner: project.RegisterOnProjectResourceOwner,
 		PrivateLabelingSetting:         domain.PrivateLabelingSetting(project.PrivateLabelingSetting),
+		LoginPolicySetting:             domain.LoginPolicySetting(project.LoginPolicySetting),
 		State:                          model.ProjectState(project.State),
 	}
 }

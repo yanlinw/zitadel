@@ -18,6 +18,7 @@ func ProjectCreateToDomain(req *mgmt_pb.AddProjectRequest) *domain.Project {
 		ProjectRoleCheck:               req.ProjectRoleCheck,
 		HasProjectCheck:                req.HasProjectCheck,
 		PrivateLabelingSetting:         privateLabelingSettingToDomain(req.PrivateLabelingSetting),
+		LoginPolicySetting:             loginPolicySettingToDomain(req.LoginPolicySetting),
 		RegisterOnProjectResourceOwner: req.RegisterOnProjectResourceOwner,
 	}
 }
@@ -32,6 +33,7 @@ func ProjectUpdateToDomain(req *mgmt_pb.UpdateProjectRequest) *domain.Project {
 		ProjectRoleCheck:               req.ProjectRoleCheck,
 		HasProjectCheck:                req.HasProjectCheck,
 		PrivateLabelingSetting:         privateLabelingSettingToDomain(req.PrivateLabelingSetting),
+		LoginPolicySetting:             loginPolicySettingToDomain(req.LoginPolicySetting),
 		RegisterOnProjectResourceOwner: req.RegisterOnProjectResourceOwner,
 	}
 }
@@ -44,6 +46,17 @@ func privateLabelingSettingToDomain(setting proj_pb.PrivateLabelingSetting) doma
 		return domain.PrivateLabelingSettingEnforceProjectResourceOwnerPolicy
 	default:
 		return domain.PrivateLabelingSettingUnspecified
+	}
+}
+
+func loginPolicySettingToDomain(setting proj_pb.LoginPolicySetting) domain.LoginPolicySetting {
+	switch setting {
+	case proj_pb.LoginPolicySetting_LOGIN_POLICY_SETTING_ALLOW_LOGIN_USER_RESOURCE_OWNER_POLICY:
+		return domain.LoginPolicySettingAllowLoginUserResourceOwnerPolicy
+	case proj_pb.LoginPolicySetting_LOGIN_POLICY_SETTING_ENFORCE_PROJECT_RESOURCE_OWNER_POLICY:
+		return domain.LoginPolicySettingEnforceProjectResourceOwnerPolicy
+	default:
+		return domain.LoginPolicySettingUnspecified
 	}
 }
 

@@ -21,6 +21,7 @@ type Project struct {
 	HasProjectCheck                bool
 	RegisterOnProjectResourceOwner bool
 	PrivateLabelingSetting         domain.PrivateLabelingSetting
+	LoginPolicySetting             domain.LoginPolicySetting
 }
 type ProjectChanges struct {
 	Changes      []*ProjectChange

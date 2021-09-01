@@ -43,6 +43,7 @@ type ProjectAddedEvent struct {
 	HasProjectCheck                bool                          `json:"hasProjectCheck,omitempty"`
 	RegisterOnProjectResourceOwner bool                          `json:"registerOnProjectResourceOwner,omitempty"`
 	PrivateLabelingSetting         domain.PrivateLabelingSetting `json:"privateLabelingSetting,omitempty"`
+	LoginPolicySetting             domain.LoginPolicySetting     `json:"loginPolicySetting,omitempty"`
 }
 
 func (e *ProjectAddedEvent) Data() interface{} {
@@ -62,6 +63,7 @@ func NewProjectAddedEvent(
 	hasProjectCheck,
 	registerOnProjectResourceOwner bool,
 	privateLabelingSetting domain.PrivateLabelingSetting,
+	loginPolicySetting domain.LoginPolicySetting,
 ) *ProjectAddedEvent {
 	return &ProjectAddedEvent{
 		BaseEvent: *eventstore.NewBaseEventForPush(
@@ -74,6 +76,7 @@ func NewProjectAddedEvent(
 		ProjectRoleCheck:               projectRoleCheck,
 		HasProjectCheck:                hasProjectCheck,
 		PrivateLabelingSetting:         privateLabelingSetting,
+		LoginPolicySetting:             loginPolicySetting,
 		RegisterOnProjectResourceOwner: registerOnProjectResourceOwner,
 	}
 }
@@ -100,6 +103,7 @@ type ProjectChangeEvent struct {
 	HasProjectCheck                *bool                          `json:"hasProjectCheck,omitempty"`
 	RegisterOnProjectResourceOwner *bool                          `json:"registerOnProjectResourceOwner,omitempty"`
 	PrivateLabelingSetting         *domain.PrivateLabelingSetting `json:"privateLabelingSetting,omitempty"`
+	LoginPolicySetting             *domain.LoginPolicySetting     `json:"loginPolicySetting,omitempty"`
 	oldName                        string
 }
 
@@ -175,6 +179,12 @@ func ChangeRegisterOnProjectResourceOwner(RegisterOnProjectResourceOwner bool) f
 func ChangePrivateLabelingSetting(ChangePrivateLabelingSetting domain.PrivateLabelingSetting) func(event *ProjectChangeEvent) {
 	return func(e *ProjectChangeEvent) {
 		e.PrivateLabelingSetting = &ChangePrivateLabelingSetting
+	}
+}
+
+func ChangeLoginPolicySetting(ChangeLoginPolicySetting domain.LoginPolicySetting) func(event *ProjectChangeEvent) {
+	return func(e *ProjectChangeEvent) {
+		e.LoginPolicySetting = &ChangeLoginPolicySetting
 	}
 }
 

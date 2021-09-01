@@ -36,6 +36,7 @@ type ApplicationView struct {
 	HasProjectCheck                bool                          `json:"hasProjectCheck" gorm:"column:has_project_check"`
 	RegisterOnProjectResourceOwner bool                          `json:"registerOnProjectResourceOwner" gorm:"column:register_on_project_resource_owner"`
 	PrivateLabelingSetting         domain.PrivateLabelingSetting `json:"privateLabelingSetting" gorm:"column:private_labeling_setting"`
+	LoginPolicySetting             domain.LoginPolicySetting     `json:"loginPolicySetting" gorm:"column:login_policy_setting"`
 
 	IsOIDC                     bool           `json:"-" gorm:"column:is_oidc"`
 	OIDCVersion                int32          `json:"oidcVersion" gorm:"column:oidc_version"`
@@ -75,6 +76,7 @@ func ApplicationViewToModel(app *ApplicationView) *model.ApplicationView {
 		HasProjectCheck:                app.HasProjectCheck,
 		RegisterOnProjectResourceOwner: app.RegisterOnProjectResourceOwner,
 		PrivateLabelingSetting:         app.PrivateLabelingSetting,
+		LoginPolicySetting:             app.LoginPolicySetting,
 
 		IsOIDC:                     app.IsOIDC,
 		OIDCVersion:                model.OIDCVersion(app.OIDCVersion),
@@ -247,6 +249,7 @@ func (a *ApplicationView) setProjectChanges(event *models.Event) error {
 		HasProjectCheck                *bool                          `json:"hasProjectCheck,omitempty"`
 		RegisterOnProjectResourceOwner *bool                          `json:"registerOnProjectResourceOwner,omitempty"`
 		PrivateLabelingSetting         *domain.PrivateLabelingSetting `json:"privateLabelingSetting,omitempty"`
+		LoginPolicySetting             *domain.LoginPolicySetting     `json:"loginPolicySetting,omitempty"`
 	}{}
 	if err := json.Unmarshal(event.Data, &changes); err != nil {
 		logging.Log("EVEN-DFbfg").WithError(err).Error("could not unmarshal event data")
@@ -266,6 +269,9 @@ func (a *ApplicationView) setProjectChanges(event *models.Event) error {
 	}
 	if changes.PrivateLabelingSetting != nil {
 		a.PrivateLabelingSetting = *changes.PrivateLabelingSetting
+	}
+	if changes.LoginPolicySetting != nil {
+		a.LoginPolicySetting = *changes.LoginPolicySetting
 	}
 	return nil
 }

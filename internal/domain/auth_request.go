@@ -39,6 +39,7 @@ type AuthRequest struct {
 	ApplicationResourceOwner       string
 	RegisterOnProjectResourceOwner bool
 	PrivateLabelingSetting         PrivateLabelingSetting
+	LoginPolicySetting             LoginPolicySetting
 	SelectedIDPConfigID            string
 	LinkingUsers                   []*ExternalUser
 	PossibleSteps                  []NextStep

@@ -3278,6 +3278,7 @@ This is an empty request
 | project_role_check |  bool | ZITADEL checks if the user has at least one on this project |  |
 | has_project_check |  bool | ZITADEL checks if the org of the user has permission to this project |  |
 | private_labeling_setting |  zitadel.project.v1.PrivateLabelingSetting | Defines from where the private labeling should be triggered | enum.defined_only: true<br />  |
+| login_policy_setting |  zitadel.project.v1.LoginPolicySetting | Defines from where the login policy should be triggered | enum.defined_only: true<br />  |
 | register_on_project_resource_owner |  bool | If set a user will be registered on the projects resource owner instead of global organisation |  |
 
 
@@ -7525,6 +7526,7 @@ This is an empty request
 | project_role_check |  bool | ZITADEL checks if the user has at least one on this project |  |
 | has_project_check |  bool | ZITADEL checks if the org of the user has permission to this project |  |
 | private_labeling_setting |  zitadel.project.v1.PrivateLabelingSetting | Defines from where the private labeling should be triggered | enum.defined_only: true<br />  |
+| login_policy_setting |  zitadel.project.v1.LoginPolicySetting | Defines from where the login policy should be triggered | enum.defined_only: true<br />  |
 | register_on_project_resource_owner |  bool | If set a user will be registered on the projects resource owner instead of global organisation |  |
 
 
