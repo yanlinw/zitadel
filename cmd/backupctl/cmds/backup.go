@@ -8,7 +8,7 @@ import (
 func BackupCommand(monitor mntr.Monitor) *cobra.Command {
 	var (
 		cmd = &cobra.Command{
-			Use:   "Backup",
+			Use:   "backup",
 			Short: "Backup to storage",
 			Long:  "Backup to storage",
 		}

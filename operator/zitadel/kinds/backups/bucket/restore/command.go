@@ -32,7 +32,7 @@ func getCommand(
 			"--host=" + dbURL,
 			"--port=" + strconv.Itoa(int(dbPort)),
 			"--source-sajsonpath=" + serviceAccountPath,
-			"--source-bucket" + bucketName,
+			"--source-bucket=" + bucketName,
 			"--certs-dir=" + certsFolder,
 		}, " ",
 		),

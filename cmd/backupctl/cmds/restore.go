@@ -8,7 +8,7 @@ import (
 func RestoreCommand(monitor mntr.Monitor) *cobra.Command {
 	var (
 		cmd = &cobra.Command{
-			Use:   "Restore",
+			Use:   "restore",
 			Short: "Restore from storage",
 			Long:  "Restore from storage",
 		}

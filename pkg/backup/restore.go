@@ -1,40 +1,63 @@
 package backup
 
 import (
+	"context"
 	"github.com/caos/zitadel/pkg/backup/cockroachdb"
 	"github.com/caos/zitadel/pkg/backup/rsync"
 	"io/fs"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 	"sync"
 )
 
 func RsyncRestoreS3ToS3(
+	ctx context.Context,
 	backupName string,
 	backupNameEnv string,
 	destinationName string,
 	destinationEndpoint string,
-	destinationAKID string,
-	destinationSAK string,
+	destinationAKIDPath string,
+	destinationSAKPath string,
 	sourceName string,
 	sourceEndpoint string,
-	sourceAKID string,
-	sourceSAK string,
+	sourceAKIDPath string,
+	sourceSAKPath string,
 	sourceBucket string,
 	configFilePath string,
 ) error {
 
-	assetBuckets, err := ListS3Folders(sourceEndpoint, sourceAKID, sourceSAK, sourceBucket, getS3Path(backupName, backupNameEnv))
+	sourceAKID, err := ioutil.ReadFile(sourceAKIDPath)
 	if err != nil {
 		return err
 	}
 
-	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, sourceAKID, sourceSAK)
+	sourceSAK, err := ioutil.ReadFile(sourceSAKPath)
 	if err != nil {
 		return err
 	}
 
-	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, destinationAKID, destinationSAK)
+	destinationAKID, err := ioutil.ReadFile(destinationAKIDPath)
+	if err != nil {
+		return err
+	}
+
+	destinationSAK, err := ioutil.ReadFile(destinationSAKPath)
+	if err != nil {
+		return err
+	}
+
+	assetBuckets, err := ListS3Folders(sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceBucket, getAssetPath(backupName, backupNameEnv))
+	if err != nil {
+		return err
+	}
+
+	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, string(sourceAKID), string(sourceSAK))
+	if err != nil {
+		return err
+	}
+
+	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK))
 	if err != nil {
 		return err
 	}
@@ -52,15 +75,16 @@ func RsyncRestoreS3ToS3(
 
 	for _, assetBucket := range assetBuckets {
 		wg.Add(1)
-		sourceBucket := assetBucket
 		if err := runCommand(
 			rsync.GetCommand(
+				ctx,
 				configFilePath,
 				sourceName,
-				getS3FullPath(sourceBucket, backupName, backupNameEnv),
+				filepath.Join(getAssetFullPath(sourceBucket, backupName, backupNameEnv), assetBucket),
 				destinationName,
 				assetBucket,
 			),
+			&wg,
 		); err != nil {
 			return err
 		}
@@ -71,18 +95,30 @@ func RsyncRestoreS3ToS3(
 }
 
 func RsyncRestoreGCSToS3(
+	ctx context.Context,
 	backupName string,
 	backupNameEnv string,
 	destinationName string,
 	destinationEndpoint string,
-	destinationAKID string,
-	destinationSAK string,
+	destinationAKIDPath string,
+	destinationSAKPath string,
 	sourceName string,
 	sourceSaJsonPath string,
 	sourceBucket string,
 	configFilePath string,
 ) error {
-	assetBuckets, err := ListGCSFolders(sourceSaJsonPath, sourceBucket, getS3Path(backupName, backupNameEnv))
+
+	destinationAKID, err := ioutil.ReadFile(destinationAKIDPath)
+	if err != nil {
+		return err
+	}
+
+	destinationSAK, err := ioutil.ReadFile(destinationSAKPath)
+	if err != nil {
+		return err
+	}
+
+	assetBuckets, err := ListGCSFolders(sourceSaJsonPath, sourceBucket, getAssetPath(backupName, backupNameEnv))
 	if err != nil {
 		return err
 	}
@@ -92,7 +128,7 @@ func RsyncRestoreGCSToS3(
 		return err
 	}
 
-	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, destinationAKID, destinationSAK)
+	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK))
 	if err != nil {
 		return err
 	}
@@ -110,15 +146,16 @@ func RsyncRestoreGCSToS3(
 
 	for _, assetBucket := range assetBuckets {
 		wg.Add(1)
-		sourceBucket := assetBucket
 		if err := runCommand(
 			rsync.GetCommand(
+				ctx,
 				configFilePath,
 				sourceName,
-				getS3FullPath(sourceBucket, backupName, backupNameEnv),
+				filepath.Join(getAssetFullPath(sourceBucket, backupName, backupNameEnv), assetBucket),
 				destinationName,
 				assetBucket,
 			),
+			&wg,
 		); err != nil {
 			return err
 		}
@@ -129,6 +166,7 @@ func RsyncRestoreGCSToS3(
 }
 
 func CockroachRestoreFromGCS(
+	ctx context.Context,
 	certsFolder string,
 	bucketName string,
 	backupName string,
@@ -137,19 +175,32 @@ func CockroachRestoreFromGCS(
 	port string,
 	serviceAccountPath string,
 ) error {
-	return runCommand(
-		cockroachdb.GetBackupToGCS(
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+
+	data, err := ioutil.ReadFile(serviceAccountPath)
+	if err != nil {
+		return err
+	}
+	err = runCommand(
+		cockroachdb.GetRestoreFromGCS(
+			ctx,
 			certsFolder,
 			host,
 			port,
 			bucketName,
-			getS3Path(backupName, backupNameEnv),
-			serviceAccountPath,
+			getBackupPath(backupName, backupNameEnv),
+			data,
 		),
+		&wg,
 	)
+	wg.Wait()
+	return err
 }
 
 func CockroachRestoreFromS3(
+	ctx context.Context,
 	certsFolder string,
 	bucketName string,
 	backupName string,
@@ -162,18 +213,41 @@ func CockroachRestoreFromS3(
 	endpoint string,
 	region string,
 ) error {
-	return runCommand(
-		cockroachdb.GetBackupToS3(
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+
+	accessKeyID, err := ioutil.ReadFile(accessKeyIDPath)
+	if err != nil {
+		return err
+	}
+
+	secretAccessKey, err := ioutil.ReadFile(secretAccessKeyPath)
+	if err != nil {
+		return err
+	}
+
+	sessionToken, err := ioutil.ReadFile(sessionTokenPath)
+	if err != nil {
+		return err
+	}
+
+	err = runCommand(
+		cockroachdb.GetRestoreFromS3(
+			ctx,
 			certsFolder,
 			host,
 			port,
 			bucketName,
-			getS3Path(backupName, backupNameEnv),
-			accessKeyIDPath,
-			secretAccessKeyPath,
-			sessionTokenPath,
+			getBackupPath(backupName, backupNameEnv),
+			accessKeyID,
+			secretAccessKey,
+			sessionToken,
 			endpoint,
 			region,
 		),
+		&wg,
 	)
+	wg.Wait()
+	return err
 }

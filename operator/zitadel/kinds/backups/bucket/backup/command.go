@@ -38,7 +38,7 @@ func getBackupCommand(
 			"--host=" + dbURL,
 			"--port=" + strconv.Itoa(int(dbPort)),
 			"--destination-sajsonpath=" + serviceAccountPath,
-			"--destination-bucket" + bucketName,
+			"--destination-bucket=" + bucketName,
 			"--certs-dir=" + certsFolder,
 		}, " ",
 		),

@@ -11,6 +11,7 @@ import (
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 )
 
@@ -134,7 +135,26 @@ func ListGCSFolders(
 		if err != nil {
 			return nil, err
 		}
-		objects = append(objects, obj.Name)
+		if strings.HasPrefix(obj.Name, path) {
+			folder := strings.TrimPrefix(obj.Name, path+"/")
+			for {
+				folderT, _ := filepath.Split(folder)
+				folder = strings.TrimSuffix(folderT, string(filepath.Separator))
+				if !strings.Contains(folder, string(filepath.Separator)) {
+					break
+				}
+			}
+
+			alreadyListed := false
+			for _, object := range objects {
+				if object == folder {
+					alreadyListed = true
+				}
+			}
+			if !alreadyListed {
+				objects = append(objects, folder)
+			}
+		}
 	}
 
 	return objects, nil

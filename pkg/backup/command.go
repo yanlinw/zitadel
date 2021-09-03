@@ -1,29 +1,21 @@
 package backup
 
 import (
+	"fmt"
 	"os/exec"
-	"syscall"
+	"sync"
 )
 
-func runCommand(cmd *exec.Cmd) error {
+func runCommand(cmd *exec.Cmd, wg *sync.WaitGroup) error {
 	errs := make(chan error)
 	go func() {
-		if err := cmd.Start(); err != nil {
-			errs <- err
+		out, err := cmd.CombinedOutput()
+		if err != nil {
+			errs <- fmt.Errorf("%s: %s", err, out)
+			wg.Done()
 			return
 		}
-
-		if err := cmd.Wait(); err != nil {
-			if exiterr, ok := err.(*exec.ExitError); ok {
-				if _, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-					errs <- err
-					return
-				}
-			} else {
-				errs <- err
-				return
-			}
-		}
+		wg.Done()
 		errs <- nil
 	}()
 

@@ -1,13 +1,14 @@
 package backup
 
 import (
+	"context"
 	"github.com/caos/orbos/mntr"
 	"github.com/caos/zitadel/cmd/backupctl/cmds/helpers"
 	"github.com/caos/zitadel/pkg/backup"
 	"github.com/spf13/cobra"
 )
 
-func GCSCommand(monitor mntr.Monitor) *cobra.Command {
+func GCSCommand(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 	var (
 		backupName     string
 		backupNameEnv  string
@@ -35,7 +36,7 @@ func GCSCommand(monitor mntr.Monitor) *cobra.Command {
 	flags.StringVar(&assetAKID, "asset-akid", "", "AccessKeyID for the asset S3 storage")
 	flags.StringVar(&assetSAK, "asset-sak", "", "SecretAccessKey for the asset S3 storage")
 	flags.StringVar(&assetPrefix, "asset-prefix", "", "Bucket-Prefix in the asset S3 storage")
-	flags.StringVar(&destSAJSONPath, "destination-sajsonpath", "~/sa.json", "Path to where ServiceAccount-json will be written for the destination GCS")
+	flags.StringVar(&destSAJSONPath, "destination-sajsonpath", "", "Path to where ServiceAccount-json will be written for the destination GCS")
 	flags.StringVar(&destBucket, "destination-bucket", "", "Bucketname in the destination GCS")
 	flags.StringVar(&configPath, "configpath", "~/rsync.conf", "Path used to save rsync configuration")
 	flags.StringVar(&certsDir, "certs-dir", "", "Folder with certificates used to connect to cockroachdb")
@@ -76,6 +77,7 @@ func GCSCommand(monitor mntr.Monitor) *cobra.Command {
 		}
 
 		if err := backup.RsyncBackupS3ToGCS(
+			ctx,
 			backupName,
 			backupNameEnv,
 			"destination",
@@ -92,6 +94,7 @@ func GCSCommand(monitor mntr.Monitor) *cobra.Command {
 		}
 
 		if err := backup.CockroachBackupToGCS(
+			ctx,
 			certsDir,
 			destBucket,
 			backupName,

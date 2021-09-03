@@ -1,13 +1,14 @@
 package restore
 
 import (
+	"context"
 	"github.com/caos/orbos/mntr"
 	"github.com/caos/zitadel/cmd/backupctl/cmds/helpers"
 	"github.com/caos/zitadel/pkg/backup"
 	"github.com/spf13/cobra"
 )
 
-func S3Command(monitor mntr.Monitor) *cobra.Command {
+func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 	var (
 		backupName     string
 		backupNameEnv  string
@@ -80,6 +81,7 @@ func S3Command(monitor mntr.Monitor) *cobra.Command {
 		}
 
 		if err := backup.RsyncRestoreS3ToS3(
+			ctx,
 			backupName,
 			backupNameEnv,
 			"destination",
@@ -97,6 +99,7 @@ func S3Command(monitor mntr.Monitor) *cobra.Command {
 		}
 
 		if err := backup.CockroachRestoreFromS3(
+			ctx,
 			certsDir,
 			sourceBucket,
 			backupName,
