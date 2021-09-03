@@ -26,7 +26,7 @@ func TestBackup_Command1(t *testing.T) {
 		prefix,
 	)
 
-	equals := "backupctl restore gcs --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=testEndpoint --asset-akid=$(cat /secrets/akid) --asset-sak=$(cat /secrets/sak) --host=testDB --port=80 --source-sajsonpath=/secrets/sa.json --source-buckettestBucket --certs-dir=/cockroach/cockroach-certs"
+	equals := "backupctl restore gcs --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=testEndpoint --asset-akid=$(cat /secrets/akid) --asset-sak=$(cat /secrets/sak) --host=testDB --port=80 --source-sajsonpath=/secrets/sa.json --source-bucket=testBucket --certs-dir=/cockroach/cockroach-certs"
 	assert.Equal(t, equals, cmd)
 }
 
@@ -50,6 +50,6 @@ func TestBackup_Command2(t *testing.T) {
 		enpoint,
 		prefix,
 	)
-	equals := "backupctl restore gcs --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=testEndpoint --asset-akid=$(cat /secrets/akid) --asset-sak=$(cat /secrets/sak) --host=testDB2 --port=81 --source-sajsonpath=/secrets/sa.json --source-buckettestBucket --certs-dir=/cockroach/cockroach-certs"
+	equals := "backupctl restore gcs --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=testEndpoint --asset-akid=$(cat /secrets/akid) --asset-sak=$(cat /secrets/sak) --host=testDB2 --port=81 --source-sajsonpath=/secrets/sa.json --source-bucket=testBucket --certs-dir=/cockroach/cockroach-certs"
 	assert.Equal(t, equals, cmd)
 }
