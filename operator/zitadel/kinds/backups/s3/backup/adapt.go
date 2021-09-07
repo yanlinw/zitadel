@@ -1,6 +1,7 @@
 package backup
 
 import (
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
 	"time"
 
 	"github.com/caos/zitadel/operator"
@@ -14,18 +15,11 @@ import (
 )
 
 const (
-	defaultMode         int32 = 256
-	certPath                  = "/cockroach/cockroach-certs"
-	accessKeyIDPath           = "/secrets/accessaccountkey"
-	secretAccessKeyPath       = "/secrets/secretaccesskey"
-	sessionTokenPath          = "/secrets/sessiontoken"
-	backupNameEnv             = "BACKUP_NAME"
-	cronJobNamePrefix         = "backup-"
-	internalSecretName        = "client-certs"
-	rootSecretName            = "cockroachdb.client.root"
-	timeout                   = 15 * time.Minute
-	Normal                    = "backup"
-	Instant                   = "instantbackup"
+	backupNameEnv     = "BACKUP_NAME"
+	cronJobNamePrefix = "backup-"
+	timeout           = 15 * time.Minute
+	Normal            = "backup"
+	Instant           = "instantbackup"
 )
 
 func AdaptFunc(
@@ -36,14 +30,14 @@ func AdaptFunc(
 	checkDBReady operator.EnsureFunc,
 	bucketName string,
 	cron string,
-	accessKeyIDName string,
-	accessKeyIDKey string,
-	secretAccessKeyName string,
-	secretAccessKeyKey string,
-	sessionTokenName string,
-	sessionTokenKey string,
-	region string,
-	endpoint string,
+	sourceAKIDName string,
+	sourceAKIDKey string,
+	sourceSAKName string,
+	sourceSAKKey string,
+	destAKIDName string,
+	destAKIDKey string,
+	destSAKName string,
+	destSAKKey string,
 	timestamp string,
 	nodeselector map[string]string,
 	tolerations []corev1.Toleration,
@@ -51,6 +45,9 @@ func AdaptFunc(
 	dbPort int32,
 	features []string,
 	image string,
+	sourceEndpoint string,
+	sourcePrefix string,
+	destEndpoint string,
 ) (
 	queryFunc operator.QueryFunc,
 	destroyFunc operator.DestroyFunc,
@@ -61,25 +58,29 @@ func AdaptFunc(
 		timestamp,
 		bucketName,
 		backupName,
-		certPath,
-		accessKeyIDPath,
-		secretAccessKeyPath,
-		sessionTokenPath,
-		region,
-		endpoint,
+		core.CertPath,
+		sourceEndpoint,
+		core.SourceAkidSecretPath,
+		core.SourceSakSecretPath,
+		sourcePrefix,
+		core.DestAkidSecretPath,
+		core.DestSakSecretPath,
+		destEndpoint,
 		dbURL,
 		dbPort,
 	)
 
-	jobSpecDef := getJobSpecDef(
+	jobSpecDef := core.GetJobSpecDef(
 		nodeselector,
 		tolerations,
-		accessKeyIDName,
-		accessKeyIDKey,
-		secretAccessKeyName,
-		secretAccessKeyKey,
-		sessionTokenName,
-		sessionTokenKey,
+		sourceAKIDName,
+		sourceAKIDKey,
+		sourceSAKName,
+		sourceSAKKey,
+		destAKIDName,
+		destAKIDKey,
+		destSAKName,
+		destSAKKey,
 		backupName,
 		image,
 		command,
@@ -88,7 +89,7 @@ func AdaptFunc(
 	destroyers := []operator.DestroyFunc{}
 	queriers := []operator.QueryFunc{}
 
-	cronJobDef := getCronJob(
+	cronJobDef := core.GetCronJob(
 		namespace,
 		labels.MustForName(componentLabels, GetJobName(backupName)),
 		cron,
@@ -105,7 +106,7 @@ func AdaptFunc(
 		return nil, nil, err
 	}
 
-	jobDef := getJob(
+	jobDef := core.GetJob(
 		namespace,
 		labels.MustForName(componentLabels, cronJobNamePrefix+backupName),
 		jobSpecDef,

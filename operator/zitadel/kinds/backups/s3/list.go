@@ -37,16 +37,11 @@ func BackupList() core.BackupListFunc {
 			return nil, err
 		}
 
-		valueST, err := read.GetSecretValue(k8sClient, desiredKind.Spec.SessionToken, desiredKind.Spec.ExistingSessionToken)
-		if err != nil {
-			return nil, err
-		}
-
-		return listFilesWithFilter(valueAKI, valueSAK, valueST, desiredKind.Spec.Region, desiredKind.Spec.Endpoint, desiredKind.Spec.Bucket, name)
+		return listFilesWithFilter(valueAKI, valueSAK, desiredKind.Spec.Region, desiredKind.Spec.Endpoint, desiredKind.Spec.Bucket, name)
 	}
 }
 
-func listFilesWithFilter(akid, secretkey, sessionToken string, region string, endpoint string, bucketName, name string) ([]string, error) {
+func listFilesWithFilter(akid, secretkey string, region string, endpoint string, bucketName, name string) ([]string, error) {
 	customResolver := aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
 		return aws.Endpoint{
 			URL:           "https://" + endpoint,
@@ -57,7 +52,7 @@ func listFilesWithFilter(akid, secretkey, sessionToken string, region string, en
 	cfg, err := config.LoadDefaultConfig(
 		context.Background(),
 		config.WithRegion(region),
-		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(akid, secretkey, sessionToken)),
+		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(akid, secretkey, "")),
 		config.WithEndpointResolver(customResolver),
 	)
 	if err != nil {

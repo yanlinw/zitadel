@@ -17,12 +17,12 @@ import (
 )
 
 const (
-	accessKeyIDName     = "backup-accessaccountkey"
-	accessKeyIDKey      = "accessaccountkey"
-	secretAccessKeyName = "backup-secretaccesskey"
-	secretAccessKeyKey  = "secretaccesskey"
-	sessionTokenName    = "backup-sessiontoken"
-	sessionTokenKey     = "sessiontoken"
+	assetSecretName  = "backup-assets"
+	assetAKIDKey     = "accessaccountkey"
+	assetSAKKey      = "secretaccesskey"
+	backupSecretName = "backup-secrets"
+	backupAKIDKey    = "accessaccountkey"
+	backupSAKKey     = "secretaccesskey"
 )
 
 func AdaptFunc(
@@ -38,6 +38,10 @@ func AdaptFunc(
 	dbPort int32,
 	features []string,
 	customImageRegistry string,
+	assetEndpoint string,
+	assetAccessKeyID string,
+	assetSecretAccessKey string,
+	assetPrefix string,
 ) operator.AdaptFunc {
 	return func(
 		monitor mntr.Monitor,
@@ -67,17 +71,12 @@ func AdaptFunc(
 			internalMonitor.Verbose()
 		}
 
-		destroySAKI, err := secret.AdaptFuncToDestroy(namespace, accessKeyIDName)
+		destroySAKI, err := secret.AdaptFuncToDestroy(namespace, assetSecretName)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
 		}
 
-		destroySSAK, err := secret.AdaptFuncToDestroy(namespace, secretAccessKeyName)
-		if err != nil {
-			return nil, nil, nil, nil, nil, false, err
-		}
-
-		destroySSTK, err := secret.AdaptFuncToDestroy(namespace, sessionTokenName)
+		destroySSAK, err := secret.AdaptFuncToDestroy(namespace, backupSecretName)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
 		}
@@ -92,14 +91,14 @@ func AdaptFunc(
 			checkDBReady,
 			desiredKind.Spec.Bucket,
 			desiredKind.Spec.Cron,
-			accessKeyIDName,
-			accessKeyIDKey,
-			secretAccessKeyName,
-			secretAccessKeyKey,
-			sessionTokenName,
-			sessionTokenKey,
-			desiredKind.Spec.Region,
-			desiredKind.Spec.Endpoint,
+			assetSecretName,
+			assetAKIDKey,
+			assetSecretName,
+			assetSAKKey,
+			backupSecretName,
+			backupAKIDKey,
+			backupSecretName,
+			backupSAKKey,
 			timestamp,
 			nodeselector,
 			tolerations,
@@ -107,6 +106,9 @@ func AdaptFunc(
 			dbPort,
 			features,
 			image,
+			assetEndpoint,
+			assetPrefix,
+			desiredKind.Spec.Endpoint,
 		)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
@@ -119,20 +121,22 @@ func AdaptFunc(
 			componentLabels,
 			desiredKind.Spec.Bucket,
 			timestamp,
-			accessKeyIDName,
-			accessKeyIDKey,
-			secretAccessKeyName,
-			secretAccessKeyKey,
-			sessionTokenName,
-			sessionTokenKey,
-			desiredKind.Spec.Region,
-			desiredKind.Spec.Endpoint,
+			backupSecretName,
+			backupAKIDKey,
+			backupSecretName,
+			backupSAKKey,
+			assetSecretName,
+			assetAKIDKey,
+			assetSecretName,
+			assetSAKKey,
 			nodeselector,
 			tolerations,
 			checkDBReady,
 			dbURL,
 			dbPort,
 			image,
+			desiredKind.Spec.Endpoint,
+			assetEndpoint,
 		)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
@@ -145,7 +149,6 @@ func AdaptFunc(
 				destroyers = append(destroyers,
 					operator.ResourceDestroyToZitadelDestroy(destroySSAK),
 					operator.ResourceDestroyToZitadelDestroy(destroySAKI),
-					operator.ResourceDestroyToZitadelDestroy(destroySSTK),
 					destroyB,
 				)
 			case restore.Instant:
@@ -166,27 +169,29 @@ func AdaptFunc(
 					return nil, err
 				}
 
-				querySAKI, err := secret.AdaptFuncToEnsure(namespace, labels.MustForName(componentLabels, accessKeyIDName), map[string]string{accessKeyIDKey: valueAKI})
-				if err != nil {
-					return nil, err
-				}
-
 				valueSAK, err := read.GetSecretValue(k8sClient, desiredKind.Spec.SecretAccessKey, desiredKind.Spec.ExistingSecretAccessKey)
 				if err != nil {
 					return nil, err
 				}
 
-				querySSAK, err := secret.AdaptFuncToEnsure(namespace, labels.MustForName(componentLabels, secretAccessKeyName), map[string]string{secretAccessKeyKey: valueSAK})
+				querySD, err := secret.AdaptFuncToEnsure(
+					namespace,
+					labels.MustForName(componentLabels, backupSecretName),
+					map[string]string{
+						backupAKIDKey: valueAKI,
+						backupSAKKey:  valueSAK,
+					})
 				if err != nil {
 					return nil, err
 				}
 
-				valueST, err := read.GetSecretValue(k8sClient, desiredKind.Spec.SessionToken, desiredKind.Spec.ExistingSessionToken)
-				if err != nil {
-					return nil, err
-				}
-
-				querySST, err := secret.AdaptFuncToEnsure(namespace, labels.MustForName(componentLabels, sessionTokenName), map[string]string{sessionTokenKey: valueST})
+				querySS, err := secret.AdaptFuncToEnsure(
+					namespace,
+					labels.MustForName(componentLabels, assetSecretName),
+					map[string]string{
+						assetAKIDKey: assetAccessKeyID,
+						assetSAKKey:  assetSecretAccessKey,
+					})
 				if err != nil {
 					return nil, err
 				}
@@ -199,14 +204,14 @@ func AdaptFunc(
 					checkDBReady,
 					desiredKind.Spec.Bucket,
 					desiredKind.Spec.Cron,
-					accessKeyIDName,
-					accessKeyIDKey,
-					secretAccessKeyName,
-					secretAccessKeyKey,
-					sessionTokenName,
-					sessionTokenKey,
-					desiredKind.Spec.Region,
-					desiredKind.Spec.Endpoint,
+					assetSecretName,
+					assetAKIDKey,
+					assetSecretName,
+					assetSAKKey,
+					backupSecretName,
+					backupAKIDKey,
+					backupSecretName,
+					backupSAKKey,
 					timestamp,
 					nodeselector,
 					tolerations,
@@ -214,6 +219,9 @@ func AdaptFunc(
 					dbPort,
 					features,
 					image,
+					assetEndpoint,
+					assetPrefix,
+					desiredKind.Spec.Endpoint,
 				)
 				if err != nil {
 					return nil, err
@@ -226,20 +234,22 @@ func AdaptFunc(
 					componentLabels,
 					desiredKind.Spec.Bucket,
 					timestamp,
-					accessKeyIDName,
-					accessKeyIDKey,
-					secretAccessKeyName,
-					secretAccessKeyKey,
-					sessionTokenName,
-					sessionTokenKey,
-					desiredKind.Spec.Region,
-					desiredKind.Spec.Endpoint,
+					backupSecretName,
+					backupAKIDKey,
+					backupSecretName,
+					backupSAKKey,
+					assetSecretName,
+					assetAKIDKey,
+					assetSecretName,
+					assetSAKKey,
 					nodeselector,
 					tolerations,
 					checkDBReady,
 					dbURL,
 					dbPort,
 					image,
+					desiredKind.Spec.Endpoint,
+					assetEndpoint,
 				)
 				if err != nil {
 					return nil, err
@@ -251,16 +261,14 @@ func AdaptFunc(
 					switch feature {
 					case backup.Normal:
 						queriers = append(queriers,
-							operator.ResourceQueryToZitadelQuery(querySAKI),
-							operator.ResourceQueryToZitadelQuery(querySSAK),
-							operator.ResourceQueryToZitadelQuery(querySST),
+							operator.ResourceQueryToZitadelQuery(querySD),
+							operator.ResourceQueryToZitadelQuery(querySS),
 							queryB,
 						)
 					case backup.Instant:
 						queriers = append(queriers,
-							operator.ResourceQueryToZitadelQuery(querySAKI),
-							operator.ResourceQueryToZitadelQuery(querySSAK),
-							operator.ResourceQueryToZitadelQuery(querySST),
+							operator.ResourceQueryToZitadelQuery(querySD),
+							operator.ResourceQueryToZitadelQuery(querySS),
 							queryB,
 						)
 						cleanupQueries = append(cleanupQueries,
@@ -268,9 +276,8 @@ func AdaptFunc(
 						)
 					case restore.Instant:
 						queriers = append(queriers,
-							operator.ResourceQueryToZitadelQuery(querySAKI),
-							operator.ResourceQueryToZitadelQuery(querySSAK),
-							operator.ResourceQueryToZitadelQuery(querySST),
+							operator.ResourceQueryToZitadelQuery(querySD),
+							operator.ResourceQueryToZitadelQuery(querySS),
 							queryR,
 						)
 						cleanupQueries = append(cleanupQueries,

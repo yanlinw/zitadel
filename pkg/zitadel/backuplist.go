@@ -17,7 +17,7 @@ func GitOpsListBackups(
 	[]string,
 	error,
 ) {
-	desired, err := gitClient.ReadTree(git.DatabaseFile)
+	desired, err := gitClient.ReadTree(git.ZitadelFile)
 	if err != nil {
 		return nil, err
 	}

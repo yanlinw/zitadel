@@ -71,11 +71,6 @@ var (
 				Encryption: "AES256",
 				Encoding:   "Base64",
 			},
-			SessionToken: &secret.Secret{
-				Value:      st,
-				Encryption: "AES256",
-				Encoding:   "Base64",
-			},
 		},
 	}
 	desiredWithoutSecret = DesiredV0{
@@ -100,9 +95,6 @@ var (
 				Value: "",
 			},
 			SecretAccessKey: &secret.Secret{
-				Value: "",
-			},
-			SessionToken: &secret.Secret{
 				Value: "",
 			},
 		},

@@ -16,6 +16,10 @@ import (
 	"github.com/caos/zitadel/operator/zitadel/kinds/iam/zitadel/database"
 )
 
+const (
+	zitadelKind = "zitadel.caos.ch/ZITADEL"
+)
+
 func Adapt(
 	monitor mntr.Monitor,
 	operatorLabels *labels.Operator,
@@ -46,7 +50,7 @@ func Adapt(
 		}
 	}()
 	switch desiredTree.Common.Kind {
-	case "zitadel.caos.ch/ZITADEL":
+	case zitadelKind:
 		apiLabels := labels.MustForAPI(operatorLabels, "ZITADEL", desiredTree.Common.Version())
 		return zitadel.AdaptFunc(
 			apiLabels,
@@ -74,10 +78,8 @@ func GetBackupList(
 	error,
 ) {
 	switch desiredTree.Common.Kind {
-	case "zitadel.caos.ch/ZITADEL":
+	case zitadelKind:
 		return zitadel.BackupList()(monitor, k8sClient, desiredTree)
-	case "databases.caos.ch/ProvidedDatabse":
-		return nil, mntr.ToUserError(fmt.Errorf("no backups supported for database kind %s", desiredTree.Common.Kind))
 	default:
 		return nil, mntr.ToUserError(fmt.Errorf("unknown database kind %s", desiredTree.Common.Kind))
 	}

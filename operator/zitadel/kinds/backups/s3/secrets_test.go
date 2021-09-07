@@ -13,8 +13,6 @@ func TestBucket_getSecretsFull(t *testing.T) {
 	assert.Equal(t, desired.Spec.ExistingAccessKeyID, existing["accesskeyid"])
 	assert.Equal(t, desired.Spec.SecretAccessKey, secrets["secretaccesskey"])
 	assert.Equal(t, desired.Spec.ExistingSecretAccessKey, existing["secretaccesskey"])
-	assert.Equal(t, desired.Spec.SessionToken, secrets["sessiontoken"])
-	assert.Equal(t, desired.Spec.ExistingSessionToken, existing["sessiontoken"])
 }
 
 func TestBucket_getSecretsEmpty(t *testing.T) {
@@ -23,8 +21,6 @@ func TestBucket_getSecretsEmpty(t *testing.T) {
 	assert.Equal(t, &secret.Existing{}, existing["accesskeyid"])
 	assert.Equal(t, &secret.Secret{}, secrets["secretaccesskey"])
 	assert.Equal(t, &secret.Existing{}, existing["secretaccesskey"])
-	assert.Equal(t, &secret.Secret{}, secrets["sessiontoken"])
-	assert.Equal(t, &secret.Existing{}, existing["sessiontoken"])
 }
 
 func TestBucket_getSecretsNil(t *testing.T) {
@@ -33,6 +29,4 @@ func TestBucket_getSecretsNil(t *testing.T) {
 	assert.Equal(t, &secret.Existing{}, existing["accesskeyid"])
 	assert.Equal(t, &secret.Secret{}, secrets["secretaccesskey"])
 	assert.Equal(t, &secret.Existing{}, existing["secretaccesskey"])
-	assert.Equal(t, &secret.Secret{}, secrets["sessiontoken"])
-	assert.Equal(t, &secret.Existing{}, existing["sessiontoken"])
 }

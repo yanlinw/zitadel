@@ -18,7 +18,7 @@ func BackupCommand(getRv GetRootValues) *cobra.Command {
 	)
 
 	flags := cmd.Flags()
-	flags.StringVar(&backup, "backup", "", "Name used for backup folder")
+	flags.StringVar(&backup, "name", "", "Name used for backup folder otherwise a timestamp will get used")
 
 	cmd.RunE = func(cmd *cobra.Command, args []string) (err error) {
 		rv := getRv("backup", map[string]interface{}{"backup": backup}, "")

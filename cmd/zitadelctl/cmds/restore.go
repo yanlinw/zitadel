@@ -25,7 +25,7 @@ func RestoreCommand(getRv GetRootValues) *cobra.Command {
 	)
 
 	flags := cmd.Flags()
-	flags.StringVar(&backup, "backup", "", "Backup used for db restore")
+	flags.StringVar(&backup, "name", "", "Backup used for db restore")
 
 	cmd.RunE = func(cmd *cobra.Command, args []string) (err error) {
 		rv := getRv("restore", map[string]interface{}{"backup": backup}, "")

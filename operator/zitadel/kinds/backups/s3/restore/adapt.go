@@ -1,6 +1,7 @@
 package restore
 
 import (
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
 	"time"
 
 	"github.com/caos/zitadel/operator"
@@ -13,17 +14,11 @@ import (
 )
 
 const (
-	Instant             = "restore"
-	defaultMode         = int32(256)
-	certPath            = "/cockroach/cockroach-certs"
-	accessKeyIDPath     = "/secrets/accessaccountkey"
-	secretAccessKeyPath = "/secrets/secretaccesskey"
-	sessionTokenPath    = "/secrets/sessiontoken"
-	jobPrefix           = "backup-"
-	jobSuffix           = "-restore"
-	internalSecretName  = "client-certs"
-	rootSecretName      = "cockroachdb.client.root"
-	timeout             = 15 * time.Minute
+	Instant       = "restore"
+	jobPrefix     = "backup-"
+	jobSuffix     = "-restore"
+	timeout       = 15 * time.Minute
+	backupNameEnv = "BACKUP_NAME"
 )
 
 func AdaptFunc(
@@ -33,20 +28,22 @@ func AdaptFunc(
 	componentLabels *labels.Component,
 	bucketName string,
 	timestamp string,
-	accessKeyIDName string,
-	accessKeyIDKey string,
-	secretAccessKeyName string,
-	secretAccessKeyKey string,
-	sessionTokenName string,
-	sessionTokenKey string,
-	region string,
-	endpoint string,
+	sourceAKIDName string,
+	sourceAKIDKey string,
+	sourceSAKName string,
+	sourceSAKKey string,
+	destAKIDName string,
+	destAKIDKey string,
+	destSAKName string,
+	destSAKKey string,
 	nodeselector map[string]string,
 	tolerations []corev1.Toleration,
 	checkDBReady operator.EnsureFunc,
 	dbURL string,
 	dbPort int32,
 	image string,
+	sourceEndpoint string,
+	destEndpoint string,
 ) (
 	queryFunc operator.QueryFunc,
 	destroyFunc operator.DestroyFunc,
@@ -58,29 +55,35 @@ func AdaptFunc(
 		timestamp,
 		bucketName,
 		backupName,
-		certPath,
-		accessKeyIDPath,
-		secretAccessKeyPath,
-		sessionTokenPath,
-		region,
-		endpoint,
+		core.CertPath,
+		destEndpoint,
+		core.DestAkidSecretPath,
+		core.DestSakSecretPath,
+		core.SourceAkidSecretPath,
+		core.SourceSakSecretPath,
+		sourceEndpoint,
 		dbURL,
 		dbPort,
 	)
 
-	jobdef := getJob(
+	jobdef := core.GetJob(
 		namespace,
 		labels.MustForName(componentLabels, GetJobName(backupName)),
-		nodeselector,
-		tolerations,
-		accessKeyIDName,
-		accessKeyIDKey,
-		secretAccessKeyName,
-		secretAccessKeyKey,
-		sessionTokenName,
-		sessionTokenKey,
-		image,
-		command,
+		core.GetJobSpecDef(
+			nodeselector,
+			tolerations,
+			sourceAKIDName,
+			sourceAKIDKey,
+			sourceSAKName,
+			sourceSAKKey,
+			destAKIDName,
+			destAKIDKey,
+			destSAKName,
+			destSAKKey,
+			backupName,
+			image,
+			command,
+		),
 	)
 
 	destroyJ, err := job.AdaptFuncToDestroy(jobName, namespace)

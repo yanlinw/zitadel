@@ -14,6 +14,11 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
+const (
+	bucketBackupKind = "zitadel.caos.ch/BucketBackup"
+	s3BackupKind     = "zitadel.caos.ch/S3Backup"
+)
+
 func Adapt(
 	monitor mntr.Monitor,
 	desiredTree *tree.Tree,
@@ -44,7 +49,7 @@ func Adapt(
 	error,
 ) {
 	switch desiredTree.Common.Kind {
-	case "zitadel.caos.ch/BucketBackup":
+	case bucketBackupKind:
 		return bucket.AdaptFunc(
 			name,
 			namespace,
@@ -69,7 +74,7 @@ func Adapt(
 			assetSecretAccessKey,
 			assetPrefix,
 		)(monitor, desiredTree, currentTree)
-	case "zitadel.caos.ch/S3Backup":
+	case s3BackupKind:
 		return s3.AdaptFunc(
 			name,
 			namespace,
@@ -89,6 +94,10 @@ func Adapt(
 			dbPort,
 			features,
 			customImageRegistry,
+			assetEndpoint,
+			assetAccessKeyID,
+			assetSecretAccessKey,
+			assetPrefix,
 		)(monitor, desiredTree, currentTree)
 	default:
 		return nil, nil, nil, nil, nil, false, mntr.ToUserError(fmt.Errorf("unknown database kind %s", desiredTree.Common.Kind))
@@ -105,9 +114,9 @@ func GetBackupList(
 	error,
 ) {
 	switch desiredTree.Common.Kind {
-	case "databases.caos.ch/BucketBackup":
+	case bucketBackupKind:
 		return bucket.BackupList()(monitor, k8sClient, name, desiredTree)
-	case "databases.caos.ch/S3Backup":
+	case s3BackupKind:
 		return s3.BackupList()(monitor, k8sClient, name, desiredTree)
 	default:
 		return nil, mntr.ToUserError(fmt.Errorf("unknown database kind %s", desiredTree.Common.Kind))

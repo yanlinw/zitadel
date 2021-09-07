@@ -10,11 +10,13 @@ func getBackupCommand(
 	bucketName string,
 	backupName string,
 	certsFolder string,
-	accessKeyIDPath string,
-	secretAccessKeyPath string,
-	sessionTokenPath string,
-	region string,
-	endpoint string,
+	assetEndpoint string,
+	assetAKIDPath string,
+	assetSAKPath string,
+	assetPrefix string,
+	destinationAKIDPath string,
+	destinationSAKPath string,
+	destinationEndpoint string,
 	dbURL string,
 	dbPort int32,
 ) string {
@@ -26,25 +28,25 @@ func getBackupCommand(
 		backupCommands = append(backupCommands, "export "+backupNameEnv+"=$(date +%Y-%m-%dT%H:%M:%SZ)")
 	}
 
-	parameters := []string{
-		"AWS_ACCESS_KEY_ID=$(cat " + accessKeyIDPath + ")",
-		"AWS_SECRET_ACCESS_KEY=$(cat " + secretAccessKeyPath + ")",
-		"AWS_SESSION_TOKEN=$(cat " + sessionTokenPath + ")",
-		"AWS_ENDPOINT=" + endpoint,
-	}
-	if region != "" {
-		parameters = append(parameters, "AWS_REGION="+region)
-	}
-
 	backupCommands = append(backupCommands,
 		strings.Join([]string{
-			"cockroach",
-			"sql",
-			"--certs-dir=" + certsFolder,
+			"/backupctl",
+			"backup",
+			"s3",
+			"--backupname=" + backupName,
+			"--backupnameenv=" + backupNameEnv,
+			"--asset-endpoint=" + assetEndpoint,
+			"--asset-akid=" + assetAKIDPath,
+			"--asset-sak=" + assetSAKPath,
+			"--asset-prefix=" + assetPrefix,
+			"--destination-endpoint=" + destinationEndpoint,
+			"--destination-akid=" + destinationAKIDPath,
+			"--destination-sak=" + destinationSAKPath,
+			"--destination-bucket=" + bucketName,
 			"--host=" + dbURL,
 			"--port=" + strconv.Itoa(int(dbPort)),
-			"-e",
-			"\"BACKUP TO \\\"s3://" + bucketName + "/" + backupName + "/${" + backupNameEnv + "}?" + strings.Join(parameters, "&") + "\\\";\"",
+			"--certs-dir=" + certsFolder,
+			"--configpath=/rsync.conf",
 		}, " ",
 		),
 	)

@@ -1,4 +1,4 @@
-package backup
+package core
 
 import (
 	"github.com/caos/orbos/pkg/labels"
@@ -9,7 +9,22 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func getCronJob(
+const (
+	defaultMode                  int32 = 256
+	certsInternalSecretName            = "client-certs"
+	rootSecretName                     = "cockroachdb.client.root"
+	destSakInternalSecretName          = "dest-sak"
+	destAkidInternalSecretName         = "dest-akid"
+	sourceSakInternalSecretName        = "source-sak"
+	sourceAkidInternalSecretName       = "source-akid"
+	CertPath                           = "/cockroach/cockroach-certs"
+	SourceAkidSecretPath               = "/secrets/sakid"
+	SourceSakSecretPath                = "/secrets/ssak"
+	DestAkidSecretPath                 = "/secrets/dakid"
+	DestSakSecretPath                  = "/secrets/dsak"
+)
+
+func GetCronJob(
 	namespace string,
 	nameLabels *labels.Name,
 	cron string,
@@ -31,7 +46,7 @@ func getCronJob(
 	}
 }
 
-func getJob(
+func GetJob(
 	namespace string,
 	nameLabels *labels.Name,
 	jobSpecDef batchv1.JobSpec,
@@ -46,15 +61,17 @@ func getJob(
 	}
 }
 
-func getJobSpecDef(
+func GetJobSpecDef(
 	nodeselector map[string]string,
 	tolerations []corev1.Toleration,
-	accessKeyIDName string,
-	accessKeyIDKey string,
-	secretAccessKeyName string,
-	secretAccessKeyKey string,
-	sessionTokenName string,
-	sessionTokenKey string,
+	sourceAKIDName string,
+	sourceAKIDKey string,
+	sourceSAKName string,
+	sourceSAKKey string,
+	destAKIDName string,
+	destAKIDKey string,
+	destSAKName string,
+	destSAKKey string,
 	backupName string,
 	image string,
 	command string,
@@ -74,25 +91,29 @@ func getJobSpecDef(
 						command,
 					},
 					VolumeMounts: []corev1.VolumeMount{{
-						Name:      internalSecretName,
-						MountPath: certPath,
+						Name:      certsInternalSecretName,
+						MountPath: CertPath,
 					}, {
-						Name:      accessKeyIDKey,
-						SubPath:   accessKeyIDKey,
-						MountPath: accessKeyIDPath,
+						Name:      sourceAkidInternalSecretName,
+						SubPath:   sourceAKIDKey,
+						MountPath: SourceAkidSecretPath,
 					}, {
-						Name:      secretAccessKeyKey,
-						SubPath:   secretAccessKeyKey,
-						MountPath: secretAccessKeyPath,
+						Name:      sourceSakInternalSecretName,
+						SubPath:   sourceSAKKey,
+						MountPath: SourceSakSecretPath,
 					}, {
-						Name:      sessionTokenKey,
-						SubPath:   sessionTokenKey,
-						MountPath: sessionTokenPath,
+						Name:      destAkidInternalSecretName,
+						SubPath:   destAKIDKey,
+						MountPath: DestAkidSecretPath,
+					}, {
+						Name:      destSakInternalSecretName,
+						SubPath:   destSAKKey,
+						MountPath: DestSakSecretPath,
 					}},
 					ImagePullPolicy: corev1.PullAlways,
 				}},
 				Volumes: []corev1.Volume{{
-					Name: internalSecretName,
+					Name: certsInternalSecretName,
 					VolumeSource: corev1.VolumeSource{
 						Secret: &corev1.SecretVolumeSource{
 							SecretName:  rootSecretName,
@@ -100,24 +121,35 @@ func getJobSpecDef(
 						},
 					},
 				}, {
-					Name: accessKeyIDKey,
+					Name: sourceAkidInternalSecretName,
 					VolumeSource: corev1.VolumeSource{
 						Secret: &corev1.SecretVolumeSource{
-							SecretName: accessKeyIDName,
+							SecretName:  sourceAKIDName,
+							DefaultMode: helpers.PointerInt32(defaultMode),
 						},
 					},
 				}, {
-					Name: secretAccessKeyKey,
+					Name: sourceSakInternalSecretName,
 					VolumeSource: corev1.VolumeSource{
 						Secret: &corev1.SecretVolumeSource{
-							SecretName: secretAccessKeyName,
+							SecretName:  sourceSAKName,
+							DefaultMode: helpers.PointerInt32(defaultMode),
 						},
 					},
 				}, {
-					Name: sessionTokenKey,
+					Name: destAkidInternalSecretName,
 					VolumeSource: corev1.VolumeSource{
 						Secret: &corev1.SecretVolumeSource{
-							SecretName: sessionTokenName,
+							SecretName:  destAKIDName,
+							DefaultMode: helpers.PointerInt32(defaultMode),
+						},
+					},
+				}, {
+					Name: destSakInternalSecretName,
+					VolumeSource: corev1.VolumeSource{
+						Secret: &corev1.SecretVolumeSource{
+							SecretName:  destSAKName,
+							DefaultMode: helpers.PointerInt32(defaultMode),
 						},
 					},
 				}},

@@ -38,17 +38,5 @@ func getSecretsMap(desiredKind *DesiredV0) (map[string]*secret.Secret, map[strin
 	secrets[sakkey] = desiredKind.Spec.SecretAccessKey
 	existing[sakkey] = desiredKind.Spec.ExistingSecretAccessKey
 
-	if desiredKind.Spec.SessionToken == nil {
-		desiredKind.Spec.SessionToken = &secret.Secret{}
-	}
-
-	if desiredKind.Spec.ExistingSessionToken == nil {
-		desiredKind.Spec.ExistingSessionToken = &secret.Existing{}
-	}
-
-	stkey := "sessiontoken"
-	secrets[stkey] = desiredKind.Spec.SessionToken
-	existing[stkey] = desiredKind.Spec.ExistingSessionToken
-
 	return secrets, existing
 }

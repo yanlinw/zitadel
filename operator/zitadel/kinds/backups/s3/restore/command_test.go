@@ -1,6 +1,7 @@
 package restore
 
 import (
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -11,24 +12,25 @@ func TestBackup_Command1(t *testing.T) {
 	backupName := "testBackup"
 	dbURL := "testDB"
 	dbPort := int32(80)
-	region := "region"
-	endpoint := "endpoint"
+	sourceEndpoint := "endpoint"
+	destEndpoint := "endpoint"
 
 	cmd := getCommand(
 		timestamp,
 		bucketName,
 		backupName,
-		certPath,
-		accessKeyIDPath,
-		secretAccessKeyPath,
-		sessionTokenPath,
-		region,
-		endpoint,
+		core.CertPath,
+		destEndpoint,
+		core.DestAkidSecretPath,
+		core.DestSakSecretPath,
+		core.SourceAkidSecretPath,
+		core.SourceSakSecretPath,
+		sourceEndpoint,
 		dbURL,
 		dbPort,
 	)
 
-	equals := "cockroach sql --certs-dir=" + certPath + " --host=testDB --port=80 -e \"RESTORE FROM \\\"s3://testBucket/testBackup/test1?AWS_ACCESS_KEY_ID=$(cat " + accessKeyIDPath + ")&AWS_SECRET_ACCESS_KEY=$(cat " + secretAccessKeyPath + ")&AWS_SESSION_TOKEN=$(cat " + sessionTokenPath + ")&AWS_ENDPOINT=endpoint&AWS_REGION=region\\\";\""
+	equals := "export BACKUP_NAME=test1 && /backupctl restore s3 --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=endpoint --asset-akid=/secrets/dakid --asset-sak=/secrets/dsak --source-endpoint=endpoint --source-akid=/secrets/sakid --source-sak=/secrets/ssak --source-bucket=testBucket --host=testDB --port=80 --certs-dir=/cockroach/cockroach-certs --configpath=/rsync.conf"
 	assert.Equal(t, equals, cmd)
 }
 
@@ -38,22 +40,23 @@ func TestBackup_Command2(t *testing.T) {
 	backupName := "testBackup"
 	dbURL := "testDB2"
 	dbPort := int32(81)
-	region := "region2"
-	endpoint := "endpoint2"
+	sourceEndpoint := "endpoint2"
+	destEndpoint := "endpoint2"
 
 	cmd := getCommand(
 		timestamp,
 		bucketName,
 		backupName,
-		certPath,
-		accessKeyIDPath,
-		secretAccessKeyPath,
-		sessionTokenPath,
-		region,
-		endpoint,
+		core.CertPath,
+		destEndpoint,
+		core.DestAkidSecretPath,
+		core.DestSakSecretPath,
+		core.SourceAkidSecretPath,
+		core.SourceSakSecretPath,
+		sourceEndpoint,
 		dbURL,
 		dbPort,
 	)
-	equals := "cockroach sql --certs-dir=" + certPath + " --host=testDB2 --port=81 -e \"RESTORE FROM \\\"s3://testBucket/testBackup/test2?AWS_ACCESS_KEY_ID=$(cat " + accessKeyIDPath + ")&AWS_SECRET_ACCESS_KEY=$(cat " + secretAccessKeyPath + ")&AWS_SESSION_TOKEN=$(cat " + sessionTokenPath + ")&AWS_ENDPOINT=endpoint2&AWS_REGION=region2\\\";\""
+	equals := "export BACKUP_NAME=test2 && /backupctl restore s3 --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=endpoint2 --asset-akid=/secrets/dakid --asset-sak=/secrets/dsak --source-endpoint=endpoint2 --source-akid=/secrets/sakid --source-sak=/secrets/ssak --source-bucket=testBucket --host=testDB2 --port=81 --certs-dir=/cockroach/cockroach-certs --configpath=/rsync.conf"
 	assert.Equal(t, equals, cmd)
 }

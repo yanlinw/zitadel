@@ -23,39 +23,34 @@ func SetInstantBackup(
 	k8sClient *kubernetesmock.MockClientInt,
 	namespace string,
 	backupName string,
-	labelsAKID map[string]string,
-	labelsSAK map[string]string,
-	labelsST map[string]string,
-	akid, sak, st string,
+	labelsAsset map[string]string,
+	labelsBackup map[string]string,
+	assetAKID, assetSAK, backupAKID, backupSAK string,
 ) {
 	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      accessKeyIDName,
+			Name:      assetSecretName,
 			Namespace: namespace,
-			Labels:    labelsAKID,
+			Labels:    labelsAsset,
 		},
-		StringData: map[string]string{accessKeyIDKey: akid},
-		Type:       "Opaque",
+		StringData: map[string]string{
+			assetAKIDKey: assetAKID,
+			assetSAKKey:  assetSAK,
+		},
+		Type: "Opaque",
 	}).MinTimes(1).MaxTimes(1).Return(nil)
 
 	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      secretAccessKeyName,
+			Name:      backupSecretName,
 			Namespace: namespace,
-			Labels:    labelsSAK,
+			Labels:    labelsBackup,
 		},
-		StringData: map[string]string{secretAccessKeyKey: sak},
-		Type:       "Opaque",
-	}).MinTimes(1).MaxTimes(1).Return(nil)
-
-	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      sessionTokenName,
-			Namespace: namespace,
-			Labels:    labelsST,
+		StringData: map[string]string{
+			backupAKIDKey: backupAKID,
+			backupSAKKey:  backupSAK,
 		},
-		StringData: map[string]string{sessionTokenKey: st},
-		Type:       "Opaque",
+		Type: "Opaque",
 	}).MinTimes(1).MaxTimes(1).Return(nil)
 
 	k8sClient.EXPECT().ApplyJob(gomock.Any()).Times(1).Return(nil)
@@ -67,39 +62,35 @@ func SetInstantBackup(
 func SetBackup(
 	k8sClient *kubernetesmock.MockClientInt,
 	namespace string,
-	labelsAKID map[string]string,
-	labelsSAK map[string]string,
-	labelsST map[string]string,
-	akid, sak, st string,
+	labelsAsset map[string]string,
+	labelsBackup map[string]string,
+	assetAKID, assetSAK, backupAKID, backupSAK string,
 ) {
+
 	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      accessKeyIDName,
+			Name:      assetSecretName,
 			Namespace: namespace,
-			Labels:    labelsAKID,
+			Labels:    labelsAsset,
 		},
-		StringData: map[string]string{accessKeyIDKey: akid},
-		Type:       "Opaque",
+		StringData: map[string]string{
+			assetAKIDKey: assetAKID,
+			assetSAKKey:  assetSAK,
+		},
+		Type: "Opaque",
 	}).MinTimes(1).MaxTimes(1).Return(nil)
 
 	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      secretAccessKeyName,
+			Name:      backupSecretName,
 			Namespace: namespace,
-			Labels:    labelsSAK,
+			Labels:    labelsBackup,
 		},
-		StringData: map[string]string{secretAccessKeyKey: sak},
-		Type:       "Opaque",
-	}).MinTimes(1).MaxTimes(1).Return(nil)
-
-	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      sessionTokenName,
-			Namespace: namespace,
-			Labels:    labelsST,
+		StringData: map[string]string{
+			backupAKIDKey: backupAKID,
+			backupSAKKey:  backupSAK,
 		},
-		StringData: map[string]string{sessionTokenKey: st},
-		Type:       "Opaque",
+		Type: "Opaque",
 	}).MinTimes(1).MaxTimes(1).Return(nil)
 	k8sClient.EXPECT().ApplyCronJob(gomock.Any()).Times(1).Return(nil)
 }
@@ -108,39 +99,35 @@ func SetRestore(
 	k8sClient *kubernetesmock.MockClientInt,
 	namespace string,
 	backupName string,
-	labelsAKID map[string]string,
-	labelsSAK map[string]string,
-	labelsST map[string]string,
-	akid, sak, st string,
+	labelsAsset map[string]string,
+	labelsBackup map[string]string,
+	assetAKID, assetSAK, backupAKID, backupSAK string,
 ) {
+
 	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      accessKeyIDName,
+			Name:      assetSecretName,
 			Namespace: namespace,
-			Labels:    labelsAKID,
+			Labels:    labelsAsset,
 		},
-		StringData: map[string]string{accessKeyIDKey: akid},
-		Type:       "Opaque",
+		StringData: map[string]string{
+			assetAKIDKey: assetAKID,
+			assetSAKKey:  assetSAK,
+		},
+		Type: "Opaque",
 	}).MinTimes(1).MaxTimes(1).Return(nil)
 
 	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      secretAccessKeyName,
+			Name:      backupSecretName,
 			Namespace: namespace,
-			Labels:    labelsSAK,
+			Labels:    labelsBackup,
 		},
-		StringData: map[string]string{secretAccessKeyKey: sak},
-		Type:       "Opaque",
-	}).MinTimes(1).MaxTimes(1).Return(nil)
-
-	k8sClient.EXPECT().ApplySecret(&corev1.Secret{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      sessionTokenName,
-			Namespace: namespace,
-			Labels:    labelsST,
+		StringData: map[string]string{
+			backupAKIDKey: backupAKID,
+			backupSAKKey:  backupSAK,
 		},
-		StringData: map[string]string{sessionTokenKey: st},
-		Type:       "Opaque",
+		Type: "Opaque",
 	}).MinTimes(1).MaxTimes(1).Return(nil)
 	k8sClient.EXPECT().ApplyJob(gomock.Any()).Times(1).Return(nil)
 	k8sClient.EXPECT().GetJob(namespace, restore.GetJobName(backupName)).Times(1).Return(nil, macherrs.NewNotFound(schema.GroupResource{"batch", "jobs"}, restore.GetJobName(backupName)))

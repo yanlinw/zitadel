@@ -1,7 +1,7 @@
 package restore
 
 import (
-	"github.com/caos/zitadel/operator/common"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
 	"testing"
 
 	"github.com/caos/orbos/mntr"
@@ -26,17 +26,19 @@ func TestBackup_Adapt1(t *testing.T) {
 	timestamp := "testTs"
 	backupName := "testName2"
 	bucketName := "testBucket2"
-	version := "testVersion"
-	accessKeyIDName := "testAKIN"
-	accessKeyIDKey := "testAKIK"
-	secretAccessKeyName := "testSAKN"
-	secretAccessKeyKey := "testSAKK"
-	sessionTokenName := "testSTN"
-	sessionTokenKey := "testSTK"
-	region := "region"
-	endpoint := "endpoint"
+	sourceAKIDName := "testAKIDN"
+	sourceAKIDKey := "testAKIDK"
+	sourceSAKName := "testSAKN"
+	sourceSAKKey := "testSAK"
+	destAKIDName := "testAKIDN"
+	destAKIDKey := "testAKID"
+	destSAKName := "testSAKN"
+	destSAKKey := "testSAK"
+	sourceEndpoint := "endpoint"
+	destEndpoint := "endpoint"
 	dbURL := "testDB"
 	dbPort := int32(80)
+	image := "testImage"
 	jobName := GetJobName(backupName)
 	componentLabels := labels.MustForComponent(labels.MustForAPI(labels.MustForOperator("testProd", "testOp", "testVersion"), "testKind", "testVersion"), "testComponent")
 	nameLabels := labels.MustForName(componentLabels, jobName)
@@ -45,30 +47,36 @@ func TestBackup_Adapt1(t *testing.T) {
 		return nil
 	}
 
-	jobDef := getJob(
+	jobDef := core.GetJob(
 		namespace,
 		nameLabels,
-		nodeselector,
-		tolerations,
-		accessKeyIDName,
-		accessKeyIDKey,
-		secretAccessKeyName,
-		secretAccessKeyKey,
-		sessionTokenName,
-		sessionTokenKey,
-		common.BackupImage.Reference("", version),
-		getCommand(
-			timestamp,
-			bucketName,
+		core.GetJobSpecDef(
+			nodeselector,
+			tolerations,
+			sourceAKIDName,
+			sourceAKIDKey,
+			sourceSAKName,
+			sourceSAKKey,
+			destAKIDName,
+			destAKIDKey,
+			destSAKName,
+			destSAKKey,
 			backupName,
-			certPath,
-			accessKeyIDPath,
-			secretAccessKeyPath,
-			sessionTokenPath,
-			region,
-			endpoint,
-			dbURL,
-			dbPort,
+			image,
+			getCommand(
+				timestamp,
+				bucketName,
+				backupName,
+				core.CertPath,
+				sourceEndpoint,
+				core.DestAkidSecretPath,
+				core.DestSakSecretPath,
+				core.SourceAkidSecretPath,
+				core.SourceSakSecretPath,
+				destEndpoint,
+				dbURL,
+				dbPort,
+			),
 		),
 	)
 
@@ -82,20 +90,22 @@ func TestBackup_Adapt1(t *testing.T) {
 		componentLabels,
 		bucketName,
 		timestamp,
-		accessKeyIDName,
-		accessKeyIDKey,
-		secretAccessKeyName,
-		secretAccessKeyKey,
-		sessionTokenName,
-		sessionTokenKey,
-		region,
-		endpoint,
+		sourceAKIDName,
+		sourceAKIDKey,
+		sourceSAKName,
+		sourceSAKKey,
+		destAKIDName,
+		destAKIDKey,
+		destSAKName,
+		destSAKKey,
 		nodeselector,
 		tolerations,
 		checkDBReady,
 		dbURL,
 		dbPort,
-		common.BackupImage.Reference("", version),
+		image,
+		sourceEndpoint,
+		destEndpoint,
 	)
 
 	assert.NoError(t, err)
@@ -116,17 +126,19 @@ func TestBackup_Adapt2(t *testing.T) {
 	timestamp := "testTs"
 	backupName := "testName2"
 	bucketName := "testBucket2"
-	version := "testVersion2"
-	accessKeyIDName := "testAKIN2"
-	accessKeyIDKey := "testAKIK2"
-	secretAccessKeyName := "testSAKN2"
-	secretAccessKeyKey := "testSAKK2"
-	sessionTokenName := "testSTN2"
-	sessionTokenKey := "testSTK2"
-	region := "region2"
-	endpoint := "endpoint2"
+	sourceAKIDName := "testAKIDN2"
+	sourceAKIDKey := "testAKIDK2"
+	sourceSAKName := "testSAKN2"
+	sourceSAKKey := "testSAK2"
+	destAKIDName := "testAKIDN2"
+	destAKIDKey := "testAKID2"
+	destSAKName := "testSAKN2"
+	destSAKKey := "testSAK2"
+	sourceEndpoint := "endpoint"
+	destEndpoint := "endpoint"
 	dbURL := "testDB"
 	dbPort := int32(80)
+	image := "testImage"
 	jobName := GetJobName(backupName)
 	componentLabels := labels.MustForComponent(labels.MustForAPI(labels.MustForOperator("testProd2", "testOp2", "testVersion2"), "testKind2", "testVersion2"), "testComponent2")
 	nameLabels := labels.MustForName(componentLabels, jobName)
@@ -135,30 +147,36 @@ func TestBackup_Adapt2(t *testing.T) {
 		return nil
 	}
 
-	jobDef := getJob(
+	jobDef := core.GetJob(
 		namespace,
 		nameLabels,
-		nodeselector,
-		tolerations,
-		accessKeyIDName,
-		accessKeyIDKey,
-		secretAccessKeyName,
-		secretAccessKeyKey,
-		sessionTokenName,
-		sessionTokenKey,
-		common.BackupImage.Reference("", version),
-		getCommand(
-			timestamp,
-			bucketName,
+		core.GetJobSpecDef(
+			nodeselector,
+			tolerations,
+			sourceAKIDName,
+			sourceAKIDKey,
+			sourceSAKName,
+			sourceSAKKey,
+			destAKIDName,
+			destAKIDKey,
+			destSAKName,
+			destSAKKey,
 			backupName,
-			certPath,
-			accessKeyIDPath,
-			secretAccessKeyPath,
-			sessionTokenPath,
-			region,
-			endpoint,
-			dbURL,
-			dbPort,
+			image,
+			getCommand(
+				timestamp,
+				bucketName,
+				backupName,
+				core.CertPath,
+				destEndpoint,
+				core.DestAkidSecretPath,
+				core.DestSakSecretPath,
+				core.SourceAkidSecretPath,
+				core.SourceSakSecretPath,
+				sourceEndpoint,
+				dbURL,
+				dbPort,
+			),
 		),
 	)
 
@@ -172,20 +190,22 @@ func TestBackup_Adapt2(t *testing.T) {
 		componentLabels,
 		bucketName,
 		timestamp,
-		accessKeyIDName,
-		accessKeyIDKey,
-		secretAccessKeyName,
-		secretAccessKeyKey,
-		sessionTokenName,
-		sessionTokenKey,
-		region,
-		endpoint,
+		sourceAKIDName,
+		sourceAKIDKey,
+		sourceSAKName,
+		sourceSAKKey,
+		destAKIDName,
+		destAKIDKey,
+		destSAKName,
+		destSAKKey,
 		nodeselector,
 		tolerations,
 		checkDBReady,
 		dbURL,
 		dbPort,
-		common.BackupImage.Reference("", version),
+		image,
+		sourceEndpoint,
+		destEndpoint,
 	)
 
 	assert.NoError(t, err)

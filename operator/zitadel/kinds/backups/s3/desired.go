@@ -22,14 +22,11 @@ type Spec struct {
 	ExistingAccessKeyID     *secret.Existing `yaml:"existingAccessKeyID,omitempty"`
 	SecretAccessKey         *secret.Secret   `yaml:"secretAccessKey,omitempty"`
 	ExistingSecretAccessKey *secret.Existing `yaml:"existingSecretAccessKey,omitempty"`
-	SessionToken            *secret.Secret   `yaml:"sessionToken,omitempty"`
-	ExistingSessionToken    *secret.Existing `yaml:"existingSessionToken,omitempty"`
 }
 
 func (s *Spec) IsZero() bool {
 	if ((s.AccessKeyID == nil || s.AccessKeyID.IsZero()) && (s.ExistingAccessKeyID == nil || s.ExistingAccessKeyID.IsZero())) &&
 		((s.SecretAccessKey == nil || s.SecretAccessKey.IsZero()) && (s.ExistingSecretAccessKey == nil || s.ExistingSecretAccessKey.IsZero())) &&
-		((s.SessionToken == nil || s.SessionToken.IsZero()) && (s.ExistingSessionToken == nil || s.ExistingSessionToken.IsZero())) &&
 		!s.Verbose &&
 		s.Bucket == "" &&
 		s.Cron == "" &&

@@ -41,7 +41,7 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 	flags.StringVar(&destEndpoint, "destination-endpoint", "", "Endpoint for the destination S3 storage")
 	flags.StringVar(&destAKID, "destination-akid", "", "AccessKeyID for the destination S3 storage")
 	flags.StringVar(&destSAK, "destination-sak", "", "SecretAccessKey for the destination S3 storage")
-	flags.StringVar(&destBucket, "destination-prefix", "", "Bucketname in the destination S3 storage")
+	flags.StringVar(&destBucket, "destination-bucket", "", "Bucketname in the destination S3 storage")
 	flags.StringVar(&configPath, "configpath", "", "Path used to save rsync configuration")
 	flags.StringVar(&certsDir, "certs-dir", "", "Folder with certificates used to connect to cockroachdb")
 	flags.StringVar(&host, "host", "", "Host used to connect to cockroachdb")
