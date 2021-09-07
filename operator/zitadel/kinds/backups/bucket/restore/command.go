@@ -14,26 +14,27 @@ func getCommand(
 	dbURL string,
 	dbPort int32,
 	assetEndpoint string,
-	assetPrefix string,
 ) string {
 
 	backupCommands := make([]string, 0)
+	backupCommands = append(backupCommands, "export "+backupNameEnv+"="+timestamp)
 
 	backupCommands = append(backupCommands,
 		strings.Join([]string{
-			"backupctl",
+			"/backupctl",
 			"restore",
 			"gcs",
 			"--backupname=" + backupName,
 			"--backupnameenv=" + backupNameEnv,
 			"--asset-endpoint=" + assetEndpoint,
-			"--asset-akid=$(cat " + akidSecretPath + ")",
-			"--asset-sak=$(cat " + sakSecretPath + ")",
+			"--asset-akid=" + akidSecretPath,
+			"--asset-sak=" + sakSecretPath,
 			"--host=" + dbURL,
 			"--port=" + strconv.Itoa(int(dbPort)),
 			"--source-sajsonpath=" + serviceAccountPath,
 			"--source-bucket=" + bucketName,
 			"--certs-dir=" + certsFolder,
+			"--configpath=/rsync.conf",
 		}, " ",
 		),
 	)

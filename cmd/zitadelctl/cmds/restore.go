@@ -85,7 +85,7 @@ func RestoreCommand(getRv GetRootValues) *cobra.Command {
 		ensure := func() error { return nil }
 		if rv.Gitops {
 			ensure = func() error {
-				return crtlgitops.Restore(monitor, gitClient, k8sClient, backup)
+				return crtlgitops.Restore(monitor, gitClient, k8sClient, rv.OrbConfig, backup)
 			}
 		} else {
 			ensure = func() error {

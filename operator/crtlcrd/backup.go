@@ -4,6 +4,7 @@ import (
 	"github.com/caos/orbos/mntr"
 	"github.com/caos/orbos/pkg/kubernetes"
 	"github.com/caos/zitadel/pkg/databases"
+	"github.com/caos/zitadel/pkg/zitadel"
 )
 
 func Restore(
@@ -15,7 +16,7 @@ func Restore(
 		return err
 	}
 
-	if err := databases.CrdRestore(
+	if err := zitadel.CrdRestore(
 		monitor,
 		k8sClient,
 		backup,

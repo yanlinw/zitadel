@@ -2,7 +2,7 @@ package cmds
 
 import (
 	"github.com/caos/orbos/pkg/kubernetes/cli"
-	"github.com/caos/zitadel/pkg/databases"
+	"github.com/caos/zitadel/pkg/zitadel"
 
 	"github.com/spf13/cobra"
 )
@@ -36,17 +36,18 @@ func BackupCommand(getRv GetRootValues) *cobra.Command {
 		}
 
 		if rv.Gitops {
-			if err := databases.GitOpsInstantBackup(
+			if err := zitadel.GitOpsInstantBackup(
 				monitor,
 				k8sClient,
 				gitClient,
+				rv.OrbConfig,
 				backup,
 			); err != nil {
 				return err
 			}
 
 		} else {
-			if err := databases.CrdInstantBackup(
+			if err := zitadel.CrdInstantBackup(
 				monitor,
 				k8sClient,
 				backup,

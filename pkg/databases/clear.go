@@ -43,7 +43,7 @@ func clear(
 ) error {
 	current := &tree.Tree{}
 
-	query, _, _, _, _, _, err := orbdb.AdaptFunc("", nil, gitops, managed.Clean)(monitor, desired, current)
+	query, _, _, _, _, _, err := orbdb.AdaptFunc(nil, gitops, managed.Clean)(monitor, desired, current)
 	if err != nil {
 		return err
 	}

@@ -40,5 +40,5 @@ func DestroyDatabase(monitor mntr.Monitor, orbConfigPath string, k8sClient *kube
 		return err
 	}
 
-	return database.Destroy(monitor, gitClient, orbdb.AdaptFunc("", version, gitops, "operator", "database", "backup"), k8sClient)
+	return database.Destroy(monitor, gitClient, orbdb.AdaptFunc(version, gitops, "operator", "database", "backup"), k8sClient)
 }

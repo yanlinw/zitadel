@@ -82,7 +82,7 @@ func ConfigCommand(getRv GetRootValues, ghClientID, ghClientSecret string) *cobr
 						return nil, nil, err
 					}
 
-					_, _, configure, _, _, _, err := orbdb.AdaptFunc("", nil, rv.Gitops)(rv.Monitor, desired, &tree.Tree{})
+					_, _, configure, _, _, _, err := orbdb.AdaptFunc(nil, rv.Gitops)(rv.Monitor, desired, &tree.Tree{})
 					if err != nil {
 						return nil, nil, err
 					}

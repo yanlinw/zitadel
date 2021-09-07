@@ -34,9 +34,10 @@ COPY --from=prod-go-build /go/src/github.com/caos/zitadel/backupctl /app/backupc
 RUN chmod a+x /app/backupctl
 
 ## CokroachDB Image for cockroach binary
-FROM cockroachdb/cockroach:v20.2.3 as final
+FROM cockroachdb/cockroach:v21.1.8 as final
 
-RUN microdnf install rsync
+RUN microdnf install -y rsync curl unzip
+RUN curl https://rclone.org/install.sh | bash
 
 COPY --from=artifact /app /
 HEALTHCHECK NONE

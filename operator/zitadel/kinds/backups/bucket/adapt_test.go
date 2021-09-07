@@ -128,7 +128,7 @@ func TestBucket_AdaptBackup(t *testing.T) {
 	prefix := "testPrefix"
 
 	desired := getDesiredTree(t, masterkey, &DesiredV0{
-		Common: tree.NewCommon("databases.caos.ch/BucketBackup", "v0", false),
+		Common: tree.NewCommon("zitadel.caos.ch/BucketBackup", "v0", false),
 		Spec: &Spec{
 			Verbose: true,
 			Cron:    cron,
@@ -212,7 +212,7 @@ func TestBucket_AdaptInstantBackup(t *testing.T) {
 	prefix := "testPrefix"
 
 	desired := getDesiredTree(t, masterkey, &DesiredV0{
-		Common: tree.NewCommon("databases.caos.ch/BucketBackup", "v0", false),
+		Common: tree.NewCommon("zitadel.caos.ch/BucketBackup", "v0", false),
 		Spec: &Spec{
 			Verbose: true,
 			Cron:    cron,
@@ -297,7 +297,7 @@ func TestBucket_AdaptRestore(t *testing.T) {
 	prefix := "testPrefix"
 
 	desired := getDesiredTree(t, masterkey, &DesiredV0{
-		Common: tree.NewCommon("databases.caos.ch/BucketBackup", "v0", false),
+		Common: tree.NewCommon("zitadel.caos.ch/BucketBackup", "v0", false),
 		Spec: &Spec{
 			Verbose: true,
 			Cron:    cron,

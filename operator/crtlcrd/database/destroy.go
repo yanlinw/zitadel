@@ -15,7 +15,7 @@ func Destroy(monitor mntr.Monitor, k8sClient kubernetes.ClientInt, version strin
 	}
 
 	if desired != nil {
-		_, destroy, _, _, _, _, err := orbdb.AdaptFunc("", &version, false, "database")(monitor, desired, &tree.Tree{})
+		_, destroy, _, _, _, _, err := orbdb.AdaptFunc(&version, false, "database")(monitor, desired, &tree.Tree{})
 		if err != nil {
 			return err
 		}

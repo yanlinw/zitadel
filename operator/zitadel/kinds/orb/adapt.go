@@ -2,6 +2,8 @@ package orb
 
 import (
 	"fmt"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/backup"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/restore"
 
 	"github.com/caos/orbos/mntr"
 	"github.com/caos/orbos/pkg/kubernetes"
@@ -113,7 +115,7 @@ func AdaptFunc(
 		queriers := make([]operator.QueryFunc, 0)
 		for _, feature := range features {
 			switch feature {
-			case "iam", "migration", "scaleup", "scaledown":
+			case "iam", "migration", "scaleup", "scaledown", backup.Instant, backup.Normal, restore.Instant:
 				queriers = append(queriers,
 					operator.ResourceQueryToZitadelQuery(queryNS),
 					queryIAM,

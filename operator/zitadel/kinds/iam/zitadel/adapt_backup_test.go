@@ -93,7 +93,7 @@ func getDbClient(
 ) database.Client {
 	dbClient := databasemock.NewMockClient(gomock.NewController(t))
 	host := "host"
-	port := "port"
+	port := "26257"
 	httpPort := "80"
 
 	dbClient.EXPECT().GetConnectionInfo(monitor, k8sClient).Return(host, port, httpPort, nil)

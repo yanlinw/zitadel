@@ -14,8 +14,6 @@ import (
 
 	"github.com/caos/zitadel/operator"
 	"github.com/caos/zitadel/operator/database/kinds/databases"
-	"github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/backup"
-	"github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/restore"
 )
 
 const (
@@ -27,7 +25,6 @@ func OperatorSelector() *labels.Selector {
 }
 
 func AdaptFunc(
-	timestamp string,
 	binaryVersion *string,
 	gitops bool,
 	features ...string,
@@ -97,7 +94,7 @@ func AdaptFunc(
 		dbOrBackup := false
 		for _, feature := range features {
 			switch feature {
-			case "database", backup.Instant, backup.Normal, restore.Instant, managed.Clean:
+			case "database", managed.Clean:
 				if !dbOrBackup {
 					dbOrBackup = true
 					queriers = append(queriers,

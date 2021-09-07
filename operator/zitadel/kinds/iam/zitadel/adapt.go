@@ -334,7 +334,7 @@ func AdaptFunc(
 		}
 
 		return func(k8sClient kubernetes.ClientInt, queried map[string]interface{}) (operator.EnsureFunc, error) {
-				dbURL, _, dbPort, err := dbClient.GetConnectionInfo(monitor, k8sClient)
+				dbURL, dbPort, _, err := dbClient.GetConnectionInfo(monitor, k8sClient)
 				if err != nil {
 					return nil, err
 				}

@@ -122,7 +122,6 @@ func AdaptFunc(
 			dbPort,
 			image,
 			assetEndpoint,
-			assetPrefix,
 		)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
@@ -234,7 +233,6 @@ func AdaptFunc(
 					dbPort,
 					image,
 					assetEndpoint,
-					assetPrefix,
 				)
 				if err != nil {
 					return nil, err
