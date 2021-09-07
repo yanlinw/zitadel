@@ -18,28 +18,48 @@ func RsyncBackupS3ToS3(
 	backupNameEnv string,
 	destinationName string,
 	destinationEndpoint string,
-	destinationAKID string,
-	destinationSAK string,
+	destinationAKIDPath string,
+	destinationSAKPath string,
 	destinationBucket string,
 	sourceName string,
 	sourceEndpoint string,
-	sourceAKID string,
-	sourceSAK string,
+	sourceAKIDPath string,
+	sourceSAKPath string,
 	sourceBucketPrefix string,
 	configFilePath string,
 ) error {
 
-	assetBuckets, err := ListS3AssetBuckets(sourceEndpoint, sourceAKID, sourceSAK, sourceBucketPrefix)
+	sourceAKID, err := ioutil.ReadFile(sourceAKIDPath)
 	if err != nil {
 		return err
 	}
 
-	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, sourceAKID, sourceSAK)
+	sourceSAK, err := ioutil.ReadFile(sourceSAKPath)
 	if err != nil {
 		return err
 	}
 
-	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, destinationAKID, destinationSAK)
+	destinationAKID, err := ioutil.ReadFile(destinationAKIDPath)
+	if err != nil {
+		return err
+	}
+
+	destinationSAK, err := ioutil.ReadFile(destinationSAKPath)
+	if err != nil {
+		return err
+	}
+
+	assetBuckets, err := ListS3AssetBuckets(sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceBucketPrefix)
+	if err != nil {
+		return err
+	}
+
+	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, string(sourceAKID), string(sourceSAK))
+	if err != nil {
+		return err
+	}
+
+	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK))
 	if err != nil {
 		return err
 	}
@@ -215,7 +235,6 @@ func CockroachBackupToS3(
 	port string,
 	accessKeyIDPath string,
 	secretAccessKeyPath string,
-	sessionTokenPath string,
 	endpoint string,
 	region string,
 ) error {
@@ -231,11 +250,6 @@ func CockroachBackupToS3(
 		return err
 	}
 
-	sessionToken, err := ioutil.ReadFile(sessionTokenPath)
-	if err != nil {
-		return err
-	}
-
 	wg.Add(1)
 	err = runCommand(
 		cockroachdb.GetBackupToS3(
@@ -247,7 +261,7 @@ func CockroachBackupToS3(
 			getBackupPath(backupName, backupNameEnv),
 			accessKeyID,
 			secretAccessKey,
-			sessionToken,
+			[]byte(""),
 			endpoint,
 			region,
 		),

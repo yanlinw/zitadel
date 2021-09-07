@@ -111,7 +111,6 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			port,
 			destAKID,
 			destSAK,
-			"",
 			destEndpoint,
 			"",
 		); err != nil {
