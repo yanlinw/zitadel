@@ -53,6 +53,7 @@ func AdaptFunc(
 	image string,
 	assetEndpoint string,
 	assetPrefix string,
+	assetRegion string,
 ) (
 	queryFunc operator.QueryFunc,
 	destroyFunc operator.DestroyFunc,
@@ -74,6 +75,7 @@ func AdaptFunc(
 		dbPort,
 		assetEndpoint,
 		assetPrefix,
+		assetRegion,
 	)
 
 	jobSpecDef := getJobSpecDef(

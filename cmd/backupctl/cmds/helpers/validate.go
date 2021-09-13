@@ -33,6 +33,7 @@ func ValidateDestinationS3Flags(
 	akid string,
 	sak string,
 	bucket string,
+	region string,
 ) error {
 	if endpoint == "" {
 		return errors.New("missing or empty destination endpoint parameter")
@@ -46,6 +47,9 @@ func ValidateDestinationS3Flags(
 	if bucket == "" {
 		return errors.New("missing or empty destination bucket parameter")
 	}
+	if region == "" {
+		return errors.New("missing or empty region bucket parameter")
+	}
 	return nil
 }
 
@@ -54,6 +58,7 @@ func ValidateSourceS3Flags(
 	akid string,
 	sak string,
 	prefix string,
+	region string,
 ) error {
 	if endpoint == "" {
 		return errors.New("missing or empty source endpoint parameter")
@@ -66,6 +71,9 @@ func ValidateSourceS3Flags(
 	}
 	if prefix == "" {
 		return errors.New("missing or empty source bucket prefix parameter")
+	}
+	if region == "" {
+		return errors.New("missing or empty region bucket parameter")
 	}
 	return nil
 }

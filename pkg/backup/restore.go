@@ -19,12 +19,14 @@ func RsyncRestoreS3ToS3(
 	destinationEndpoint string,
 	destinationAKIDPath string,
 	destinationSAKPath string,
+	destinationRegion string,
 	sourceName string,
 	sourceEndpoint string,
 	sourceAKIDPath string,
 	sourceSAKPath string,
 	sourceBucket string,
 	sourcePrefix string,
+	sourceRegion string,
 	configFilePath string,
 ) error {
 
@@ -48,17 +50,17 @@ func RsyncRestoreS3ToS3(
 		return err
 	}
 
-	assetBuckets, err := ListS3Folders(sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceBucket, getAssetPath(backupName, backupNameEnv))
+	assetBuckets, err := ListS3Folders(sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceBucket, getAssetPath(backupName, backupNameEnv), sourceRegion)
 	if err != nil {
 		return err
 	}
 
-	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, string(sourceAKID), string(sourceSAK))
+	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceRegion)
 	if err != nil {
 		return err
 	}
 
-	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK))
+	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK), destinationRegion)
 	if err != nil {
 		return err
 	}
@@ -74,11 +76,11 @@ func RsyncRestoreS3ToS3(
 
 	var wg sync.WaitGroup
 
-	if err := CleanS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), sourcePrefix); err != nil {
+	if err := CleanS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), sourcePrefix, destinationRegion); err != nil {
 		return err
 	}
 
-	if err := EnsureS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), assetBuckets, sourcePrefix); err != nil {
+	if err := EnsureS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), assetBuckets, sourcePrefix, destinationRegion); err != nil {
 		return err
 	}
 
@@ -111,6 +113,7 @@ func RsyncRestoreGCSToS3(
 	destinationEndpoint string,
 	destinationAKIDPath string,
 	destinationSAKPath string,
+	destinationRegion string,
 	sourceName string,
 	sourceSaJsonPath string,
 	sourceBucket string,
@@ -138,7 +141,7 @@ func RsyncRestoreGCSToS3(
 		return err
 	}
 
-	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK))
+	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK), destinationRegion)
 	if err != nil {
 		return err
 	}
@@ -154,11 +157,11 @@ func RsyncRestoreGCSToS3(
 
 	var wg sync.WaitGroup
 
-	if err := CleanS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), sourcePrefix); err != nil {
+	if err := CleanS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), sourcePrefix, destinationRegion); err != nil {
 		return err
 	}
 
-	if err := EnsureS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), assetBuckets, sourcePrefix); err != nil {
+	if err := EnsureS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), assetBuckets, sourcePrefix, destinationRegion); err != nil {
 		return err
 	}
 

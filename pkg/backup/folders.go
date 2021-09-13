@@ -3,8 +3,6 @@ package backup
 import (
 	"cloud.google.com/go/storage"
 	"context"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
@@ -13,39 +11,15 @@ import (
 	"strings"
 )
 
-func getS3Client(
-	endpoint string,
-	accessKeyID string,
-	secretAccessKey string,
-) *s3.Client {
-
-	const defaultRegion = "us-east-1"
-	staticResolver := aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
-		return aws.Endpoint{
-			PartitionID:       "aws",
-			URL:               endpoint, // or where ever you ran minio
-			SigningRegion:     defaultRegion,
-			HostnameImmutable: true,
-		}, nil
-	})
-
-	cfg := aws.Config{
-		Region:           defaultRegion,
-		Credentials:      credentials.NewStaticCredentialsProvider(accessKeyID, secretAccessKey, ""),
-		EndpointResolver: staticResolver,
-	}
-
-	return s3.NewFromConfig(cfg)
-}
-
 func ListS3Folders(
 	endpoint string,
 	accessKeyID string,
 	secretAccessKey string,
 	bucketName string,
 	path string,
+	region string,
 ) ([]string, error) {
-	s3Client := getS3Client(endpoint, accessKeyID, secretAccessKey)
+	s3Client := getS3Client(endpoint, accessKeyID, secretAccessKey, region)
 	ctx := context.Background()
 	input := &s3.ListObjectsV2Input{
 		Bucket: &bucketName,

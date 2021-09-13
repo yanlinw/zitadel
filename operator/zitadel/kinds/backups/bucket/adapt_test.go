@@ -42,6 +42,7 @@ func TestBucket_Secrets(t *testing.T) {
 	akid := "testAKID"
 	sak := "testSAK"
 	prefix := "testPrefix"
+	region := "testRegion"
 
 	desired := getDesiredTree(t, masterkey, &DesiredV0{
 		Common: tree.NewCommon("databases.caos.ch/"+kind, kindVersion, false),
@@ -80,6 +81,7 @@ func TestBucket_Secrets(t *testing.T) {
 		akid,
 		sak,
 		prefix,
+		region,
 	)(
 		monitor,
 		desired,
@@ -126,6 +128,7 @@ func TestBucket_AdaptBackup(t *testing.T) {
 	akid := "testAKID"
 	sak := "testSAK"
 	prefix := "testPrefix"
+	region := "testRegion"
 
 	desired := getDesiredTree(t, masterkey, &DesiredV0{
 		Common: tree.NewCommon("zitadel.caos.ch/BucketBackup", "v0", false),
@@ -162,6 +165,7 @@ func TestBucket_AdaptBackup(t *testing.T) {
 		akid,
 		sak,
 		prefix,
+		region,
 	)(
 		monitor,
 		desired,
@@ -210,6 +214,7 @@ func TestBucket_AdaptInstantBackup(t *testing.T) {
 	akid := "testAKID"
 	sak := "testSAK"
 	prefix := "testPrefix"
+	region := "testRegion"
 
 	desired := getDesiredTree(t, masterkey, &DesiredV0{
 		Common: tree.NewCommon("zitadel.caos.ch/BucketBackup", "v0", false),
@@ -246,6 +251,7 @@ func TestBucket_AdaptInstantBackup(t *testing.T) {
 		akid,
 		sak,
 		prefix,
+		region,
 	)(
 		monitor,
 		desired,
@@ -295,6 +301,7 @@ func TestBucket_AdaptRestore(t *testing.T) {
 	akid := "testAKID"
 	sak := "testSAK"
 	prefix := "testPrefix"
+	region := "testRegion"
 
 	desired := getDesiredTree(t, masterkey, &DesiredV0{
 		Common: tree.NewCommon("zitadel.caos.ch/BucketBackup", "v0", false),
@@ -331,6 +338,7 @@ func TestBucket_AdaptRestore(t *testing.T) {
 		akid,
 		sak,
 		prefix,
+		region,
 	)(
 		monitor,
 		desired,

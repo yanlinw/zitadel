@@ -15,11 +15,13 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 		assetEndpoint  string
 		assetAKID      string
 		assetSAK       string
+		assetRegion    string
 		sourceEndpoint string
 		sourceBucket   string
 		sourceAKID     string
 		sourceSAK      string
 		sourcePrefix   string
+		sourceRegion   string
 		configPath     string
 		certsDir       string
 		host           string
@@ -37,11 +39,13 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 	flags.StringVar(&assetEndpoint, "asset-endpoint", "", "Endpoint for the asset S3 storage")
 	flags.StringVar(&assetAKID, "asset-akid", "", "AccessKeyID for the asset S3 storage")
 	flags.StringVar(&assetSAK, "asset-sak", "", "SecretAccessKey for the asset S3 storage")
+	flags.StringVar(&assetRegion, "asset-region", "", "Region for the asset S3 storage")
 	flags.StringVar(&sourceEndpoint, "source-endpoint", "", "Endpoint for the source S3 storage")
 	flags.StringVar(&sourceAKID, "source-akid", "", "AccessKeyID for the source S3 storage")
 	flags.StringVar(&sourceSAK, "source-sak", "", "SecretAccessKey for the source S3 storage")
 	flags.StringVar(&sourceBucket, "source-bucket", "", "Bucketname in the source S3 storage")
-	flags.StringVar(&sourcePrefix, "source-prefix", "", "Prefix for the buckts in the source S3 storage")
+	flags.StringVar(&sourcePrefix, "source-prefix", "", "Prefix for the buckets in the source S3 storage")
+	flags.StringVar(&sourceRegion, "source-region", "", "Region for the buckets in the source S3 storage")
 	flags.StringVar(&configPath, "configpath", "", "Path used to save rsync configuration")
 	flags.StringVar(&certsDir, "certs-dir", "", "Folder with certificates used to connect to cockroachdb")
 	flags.StringVar(&host, "host", "", "Host used to connect to cockroachdb")
@@ -61,6 +65,7 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			sourceAKID,
 			sourceSAK,
 			sourceBucket,
+			sourceRegion,
 		); err != nil {
 			return err
 		}
@@ -70,6 +75,7 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			assetAKID,
 			assetSAK,
 			sourcePrefix,
+			assetRegion,
 		); err != nil {
 			return err
 		}
@@ -90,12 +96,14 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			assetEndpoint,
 			assetAKID,
 			assetSAK,
+			assetRegion,
 			"source",
 			sourceEndpoint,
 			sourceAKID,
 			sourceSAK,
 			sourceBucket,
 			sourcePrefix,
+			sourceRegion,
 			configPath,
 		); err != nil {
 			return err
@@ -113,7 +121,7 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			sourceSAK,
 			"",
 			sourceEndpoint,
-			"",
+			sourceRegion,
 		); err != nil {
 			return err
 		}

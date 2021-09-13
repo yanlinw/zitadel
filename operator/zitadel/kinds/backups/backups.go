@@ -39,6 +39,7 @@ func Adapt(
 	assetAccessKeyID string,
 	assetSecretAccessKey string,
 	assetPrefix string,
+	assetRegion string,
 ) (
 	operator.QueryFunc,
 	operator.DestroyFunc,
@@ -73,6 +74,7 @@ func Adapt(
 			assetAccessKeyID,
 			assetSecretAccessKey,
 			assetPrefix,
+			assetRegion,
 		)(monitor, desiredTree, currentTree)
 	case s3BackupKind:
 		return s3.AdaptFunc(
@@ -98,6 +100,7 @@ func Adapt(
 			assetAccessKeyID,
 			assetSecretAccessKey,
 			assetPrefix,
+			assetRegion,
 		)(monitor, desiredTree, currentTree)
 	default:
 		return nil, nil, nil, nil, nil, false, mntr.ToUserError(fmt.Errorf("unknown database kind %s", desiredTree.Common.Kind))

@@ -42,6 +42,7 @@ func AdaptFunc(
 	assetAccessKeyID string,
 	assetSecretAccessKey string,
 	assetPrefix string,
+	assetRegion string,
 ) operator.AdaptFunc {
 	return func(
 		monitor mntr.Monitor,
@@ -109,6 +110,8 @@ func AdaptFunc(
 			assetEndpoint,
 			assetPrefix,
 			desiredKind.Spec.Endpoint,
+			assetRegion,
+			desiredKind.Spec.Region,
 		)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
@@ -138,6 +141,8 @@ func AdaptFunc(
 			desiredKind.Spec.Endpoint,
 			assetEndpoint,
 			assetPrefix,
+			assetRegion,
+			desiredKind.Spec.Region,
 		)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
@@ -223,6 +228,8 @@ func AdaptFunc(
 					assetEndpoint,
 					assetPrefix,
 					desiredKind.Spec.Endpoint,
+					assetRegion,
+					desiredKind.Spec.Region,
 				)
 				if err != nil {
 					return nil, err
@@ -252,6 +259,8 @@ func AdaptFunc(
 					desiredKind.Spec.Endpoint,
 					assetEndpoint,
 					assetPrefix,
+					assetRegion,
+					desiredKind.Spec.Region,
 				)
 				if err != nil {
 					return nil, err

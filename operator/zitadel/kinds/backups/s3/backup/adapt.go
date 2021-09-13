@@ -48,6 +48,8 @@ func AdaptFunc(
 	sourceEndpoint string,
 	sourcePrefix string,
 	destEndpoint string,
+	sourceRegion string,
+	destRegion string,
 ) (
 	queryFunc operator.QueryFunc,
 	destroyFunc operator.DestroyFunc,
@@ -63,9 +65,11 @@ func AdaptFunc(
 		core.SourceAkidSecretPath,
 		core.SourceSakSecretPath,
 		sourcePrefix,
+		sourceRegion,
 		core.DestAkidSecretPath,
 		core.DestSakSecretPath,
 		destEndpoint,
+		destRegion,
 		dbURL,
 		dbPort,
 	)

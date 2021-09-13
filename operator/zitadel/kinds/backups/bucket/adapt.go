@@ -42,6 +42,7 @@ func AdaptFunc(
 	assetAccessKeyID string,
 	assetSecretAccessKey string,
 	assetPrefix string,
+	assetRegion string,
 ) operator.AdaptFunc {
 	return func(
 		monitor mntr.Monitor,
@@ -99,6 +100,7 @@ func AdaptFunc(
 			image,
 			assetEndpoint,
 			assetPrefix,
+			assetRegion,
 		)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
@@ -123,6 +125,7 @@ func AdaptFunc(
 			image,
 			assetEndpoint,
 			assetPrefix,
+			assetRegion,
 		)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
@@ -211,6 +214,7 @@ func AdaptFunc(
 					image,
 					assetEndpoint,
 					assetPrefix,
+					assetRegion,
 				)
 				if err != nil {
 					return nil, err
@@ -235,6 +239,7 @@ func AdaptFunc(
 					image,
 					assetEndpoint,
 					assetPrefix,
+					assetRegion,
 				)
 				if err != nil {
 					return nil, err

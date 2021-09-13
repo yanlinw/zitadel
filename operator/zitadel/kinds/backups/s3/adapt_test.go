@@ -23,6 +23,7 @@ func TestBucket_Secrets(t *testing.T) {
 	assetSAK := "testSAK"
 	assetEndpoint := "testEndpoint"
 	assetPrefix := "testPrefix"
+	assetRegion := "testRegion"
 	backupAKID := "testAKID"
 	backupSAK := "testSAK"
 
@@ -87,6 +88,7 @@ func TestBucket_Secrets(t *testing.T) {
 		assetAKID,
 		assetSAK,
 		assetPrefix,
+		assetRegion,
 	)(
 		monitor,
 		desired,
@@ -110,6 +112,7 @@ func TestBucket_AdaptBackup(t *testing.T) {
 	assetSAK := "testSAK"
 	assetEndpoint := "testEndpoint"
 	assetPrefix := "testPrefix"
+	assetRegion := "testRegion"
 	backupAKID := "testAKID"
 	backupSAK := "testSAK"
 
@@ -185,6 +188,7 @@ func TestBucket_AdaptBackup(t *testing.T) {
 		assetAKID,
 		assetSAK,
 		assetPrefix,
+		assetRegion,
 	)(
 		monitor,
 		desired,
@@ -216,6 +220,7 @@ func TestBucket_AdaptInstantBackup(t *testing.T) {
 	assetSAK := "testSAK"
 	assetEndpoint := "testEndpoint"
 	assetPrefix := "testPrefix"
+	assetRegion := "testRegion"
 	backupAKID := "testAKID"
 	backupSAK := "testSAK"
 
@@ -287,6 +292,7 @@ func TestBucket_AdaptInstantBackup(t *testing.T) {
 		assetAKID,
 		assetSAK,
 		assetPrefix,
+		assetRegion,
 	)(
 		monitor,
 		desired,
@@ -342,6 +348,7 @@ func TestBucket_AdaptRestore(t *testing.T) {
 	assetSAK := "testSAK"
 	assetEndpoint := "testEndpoint"
 	assetPrefix := "testPrefix"
+	assetRegion := "testRegion"
 	backupAKID := "testAKID"
 	backupSAK := "testSAK"
 	dbURL := "testDB"
@@ -387,6 +394,7 @@ func TestBucket_AdaptRestore(t *testing.T) {
 		assetAKID,
 		assetSAK,
 		assetPrefix,
+		assetRegion,
 	)(
 		monitor,
 		desired,

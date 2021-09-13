@@ -1,18 +1,13 @@
 package s3
 
 import (
-	"context"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/credentials"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/caos/orbos/mntr"
 	"github.com/caos/orbos/pkg/kubernetes"
 	"github.com/caos/orbos/pkg/secret/read"
 	"github.com/caos/orbos/pkg/tree"
 	"github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
-	"strings"
+	"github.com/caos/zitadel/pkg/backup"
 )
 
 func BackupList() core.BackupListFunc {
@@ -37,64 +32,14 @@ func BackupList() core.BackupListFunc {
 			return nil, err
 		}
 
-		return listFilesWithFilter(valueAKI, valueSAK, desiredKind.Spec.Region, desiredKind.Spec.Endpoint, desiredKind.Spec.Bucket, name)
+		return backup.S3ListFilesWithFilter(
+			valueAKI,
+			valueSAK,
+			//desiredKind.Spec.Region,
+			desiredKind.Spec.Endpoint,
+			desiredKind.Spec.Bucket,
+			name,
+			desiredKind.Spec.Region,
+		)
 	}
-}
-
-func listFilesWithFilter(akid, secretkey string, region string, endpoint string, bucketName, name string) ([]string, error) {
-	customResolver := aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
-		return aws.Endpoint{
-			URL:           "https://" + endpoint,
-			SigningRegion: region,
-		}, nil
-	})
-
-	cfg, err := config.LoadDefaultConfig(
-		context.Background(),
-		config.WithRegion(region),
-		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(akid, secretkey, "")),
-		config.WithEndpointResolver(customResolver),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	client := s3.NewFromConfig(cfg)
-
-	prefix := name + "/"
-	params := &s3.ListObjectsV2Input{
-		Bucket: aws.String(bucketName),
-		Prefix: aws.String(prefix),
-	}
-	paginator := s3.NewListObjectsV2Paginator(client, params, func(o *s3.ListObjectsV2PaginatorOptions) {
-		o.Limit = 10
-	})
-
-	names := make([]string, 0)
-	for paginator.HasMorePages() {
-		output, err := paginator.NextPage(context.Background())
-		if err != nil {
-			return nil, err
-		}
-		for _, value := range output.Contents {
-			if strings.HasPrefix(*value.Key, prefix) {
-				parts := strings.Split(*value.Key, "/")
-				if len(parts) < 2 {
-					continue
-				}
-				found := false
-				for _, name := range names {
-					if name == parts[1] {
-						found = true
-					}
-				}
-				if !found {
-					names = append(names, parts[1])
-				}
-				names = append(names)
-			}
-
-		}
-	}
-	return names, nil
 }

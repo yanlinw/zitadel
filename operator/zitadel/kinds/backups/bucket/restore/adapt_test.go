@@ -32,6 +32,7 @@ func TestBackup_Adapt1(t *testing.T) {
 	sakKey := "testSAK"
 	endpoint := "testEndpoint"
 	prefix := "testPrefix"
+	region := "testRegion"
 	dbURL := "testDB"
 	dbPort := int32(80)
 	jobName := GetJobName(backupName)
@@ -61,6 +62,7 @@ func TestBackup_Adapt1(t *testing.T) {
 			dbPort,
 			endpoint,
 			prefix,
+			region,
 		),
 		image,
 	)
@@ -87,6 +89,7 @@ func TestBackup_Adapt1(t *testing.T) {
 		image,
 		endpoint,
 		prefix,
+		region,
 	)
 
 	assert.NoError(t, err)
@@ -114,6 +117,7 @@ func TestBackup_Adapt2(t *testing.T) {
 	sakKey := "testSAK2"
 	endpoint := "testEndpoint2"
 	prefix := "testPrefix2"
+	region := "testRegion"
 	dbURL := "testDB"
 	dbPort := int32(80)
 	jobName := GetJobName(backupName)
@@ -143,6 +147,7 @@ func TestBackup_Adapt2(t *testing.T) {
 			dbPort,
 			endpoint,
 			prefix,
+			region,
 		),
 		image,
 	)
@@ -169,6 +174,7 @@ func TestBackup_Adapt2(t *testing.T) {
 		image,
 		endpoint,
 		prefix,
+		region,
 	)
 
 	assert.NoError(t, err)

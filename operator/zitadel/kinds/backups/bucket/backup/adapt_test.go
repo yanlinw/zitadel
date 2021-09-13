@@ -35,6 +35,7 @@ func TestBackup_AdaptInstantBackup1(t *testing.T) {
 	sakKey := "testSAK"
 	endpoint := "testEndpoint"
 	prefix := "testPrefix"
+	region := "testRegion"
 	dbURL := "testDB"
 	dbPort := int32(80)
 	jobName := GetJobName(backupName)
@@ -66,6 +67,7 @@ func TestBackup_AdaptInstantBackup1(t *testing.T) {
 				dbPort,
 				endpoint,
 				prefix,
+				region,
 			),
 			image,
 		),
@@ -95,6 +97,7 @@ func TestBackup_AdaptInstantBackup1(t *testing.T) {
 		image,
 		endpoint,
 		prefix,
+		region,
 	)
 
 	assert.NoError(t, err)
@@ -126,6 +129,7 @@ func TestBackup_AdaptInstantBackup2(t *testing.T) {
 	endpoint := "testEndpoint2"
 	prefix := "testPrefix2"
 	secretName := "testSecretName2"
+	region := "testRegion"
 	jobName := GetJobName(backupName)
 	componentLabels := labels.MustForComponent(labels.MustForAPI(labels.MustForOperator("testProd2", "testOp2", "testVersion2"), "testKind2", "testVersion2"), "testComponent")
 	nameLabels := labels.MustForName(componentLabels, jobName)
@@ -155,6 +159,7 @@ func TestBackup_AdaptInstantBackup2(t *testing.T) {
 				dbPort,
 				endpoint,
 				prefix,
+				region,
 			),
 			image,
 		),
@@ -184,6 +189,7 @@ func TestBackup_AdaptInstantBackup2(t *testing.T) {
 		image,
 		endpoint,
 		prefix,
+		region,
 	)
 
 	assert.NoError(t, err)
@@ -215,6 +221,7 @@ func TestBackup_AdaptBackup1(t *testing.T) {
 	endpoint := "testEndpoint"
 	prefix := "testPrefix"
 	secretName := "testSecretName"
+	region := "testRegion"
 	jobName := GetJobName(backupName)
 	componentLabels := labels.MustForComponent(labels.MustForAPI(labels.MustForOperator("testProd2", "testOp2", "testVersion2"), "testKind2", "testVersion2"), "testComponent")
 	nameLabels := labels.MustForName(componentLabels, jobName)
@@ -245,6 +252,7 @@ func TestBackup_AdaptBackup1(t *testing.T) {
 				dbPort,
 				endpoint,
 				prefix,
+				region,
 			),
 			image,
 		),
@@ -273,6 +281,7 @@ func TestBackup_AdaptBackup1(t *testing.T) {
 		image,
 		endpoint,
 		prefix,
+		region,
 	)
 
 	assert.NoError(t, err)
@@ -304,6 +313,7 @@ func TestBackup_AdaptBackup2(t *testing.T) {
 	endpoint := "testEndpoint2"
 	prefix := "testPrefix2"
 	secretName := "testSecretName2"
+	region := "testRegion"
 	jobName := GetJobName(backupName)
 	componentLabels := labels.MustForComponent(labels.MustForAPI(labels.MustForOperator("testProd2", "testOp2", "testVersion2"), "testKind2", "testVersion2"), "testComponent")
 	nameLabels := labels.MustForName(componentLabels, jobName)
@@ -334,6 +344,7 @@ func TestBackup_AdaptBackup2(t *testing.T) {
 				dbPort,
 				endpoint,
 				prefix,
+				region,
 			),
 			image,
 		),
@@ -362,6 +373,7 @@ func TestBackup_AdaptBackup2(t *testing.T) {
 		image,
 		endpoint,
 		prefix,
+		region,
 	)
 
 	assert.NoError(t, err)

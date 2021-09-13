@@ -319,6 +319,7 @@ func AdaptFunc(
 						"",
 						"",
 						"",
+						"",
 					)
 					if err != nil {
 						return nil, nil, nil, nil, nil, false, err
@@ -443,6 +444,7 @@ func AdaptFunc(
 								aid,
 								sak,
 								desiredKind.Spec.Configuration.AssetStorage.BucketPrefix,
+								desiredKind.Spec.Configuration.AssetStorage.Location,
 							)
 							if err != nil {
 								return nil, err

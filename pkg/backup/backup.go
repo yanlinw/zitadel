@@ -21,11 +21,13 @@ func RsyncBackupS3ToS3(
 	destinationAKIDPath string,
 	destinationSAKPath string,
 	destinationBucket string,
+	destinationRegion string,
 	sourceName string,
 	sourceEndpoint string,
 	sourceAKIDPath string,
 	sourceSAKPath string,
 	sourceBucketPrefix string,
+	sourceRegion string,
 	configFilePath string,
 ) error {
 
@@ -49,17 +51,17 @@ func RsyncBackupS3ToS3(
 		return err
 	}
 
-	assetBuckets, err := ListS3AssetBuckets(sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceBucketPrefix)
+	assetBuckets, err := ListS3AssetBuckets(sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceBucketPrefix, sourceRegion)
 	if err != nil {
 		return err
 	}
 
-	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, string(sourceAKID), string(sourceSAK))
+	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceRegion)
 	if err != nil {
 		return err
 	}
 
-	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK))
+	destPart, err := rsync.GetConfigPartS3(destinationName, destinationEndpoint, string(destinationAKID), string(destinationSAK), destinationRegion)
 	if err != nil {
 		return err
 	}
@@ -109,6 +111,7 @@ func RsyncBackupS3ToGCS(
 	sourceAKIDPath string,
 	sourceSAKPath string,
 	sourceBucketPrefix string,
+	sourceRegion string,
 	configFilePath string,
 ) error {
 	sourceAKID, err := ioutil.ReadFile(sourceAKIDPath)
@@ -121,12 +124,12 @@ func RsyncBackupS3ToGCS(
 		return err
 	}
 
-	assetBuckets, err := ListS3AssetBuckets(sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceBucketPrefix)
+	assetBuckets, err := ListS3AssetBuckets(sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceBucketPrefix, sourceRegion)
 	if err != nil {
 		return err
 	}
 
-	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, string(sourceAKID), string(sourceSAK))
+	sourcePart, err := rsync.GetConfigPartS3(sourceName, sourceEndpoint, string(sourceAKID), string(sourceSAK), sourceRegion)
 	if err != nil {
 		return err
 	}

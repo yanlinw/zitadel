@@ -10,18 +10,21 @@ func GetConfigPartS3(
 	endpoint string,
 	accessKeyID string,
 	secretAccessKey string,
+	region string,
 ) (string, error) {
 	type file struct {
 		Name            string
 		Endpoint        string
 		AccessKeyID     string
 		SecretAccessKey string
+		Region          string
 	}
 	fileStruct := file{
 		Name:            name,
 		Endpoint:        endpoint,
 		AccessKeyID:     accessKeyID,
 		SecretAccessKey: secretAccessKey,
+		Region:          region,
 	}
 	tmpl, err := template.New(name).Parse(
 		"[{{.Name}}]\n" +
@@ -31,7 +34,7 @@ func GetConfigPartS3(
 			"access_key_id = {{.AccessKeyID}}\n" +
 			"secret_access_key = {{.SecretAccessKey}}\n" +
 			"endpoint = {{.Endpoint}}\n" +
-			"region = us-east-1\n" +
+			"region = {{.Region}}\n" +
 			"acl = private\n")
 	if err != nil {
 		return "", err

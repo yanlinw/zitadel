@@ -37,6 +37,8 @@ func TestBackup_Adapt1(t *testing.T) {
 	sourceEndpoint := "endpoint"
 	destEndpoint := "endpoint"
 	sourcePrefix := "prefix"
+	sourceRegion := "region"
+	destRegion := "region"
 	dbURL := "testDB"
 	dbPort := int32(80)
 	image := "testImage"
@@ -69,13 +71,15 @@ func TestBackup_Adapt1(t *testing.T) {
 				bucketName,
 				backupName,
 				core.CertPath,
-				sourceEndpoint,
+				destEndpoint,
 				core.DestAkidSecretPath,
 				core.DestSakSecretPath,
+				destRegion,
 				core.SourceAkidSecretPath,
 				core.SourceSakSecretPath,
-				destEndpoint,
+				sourceEndpoint,
 				sourcePrefix,
+				sourceRegion,
 				dbURL,
 				dbPort,
 			),
@@ -109,6 +113,8 @@ func TestBackup_Adapt1(t *testing.T) {
 		sourceEndpoint,
 		destEndpoint,
 		sourcePrefix,
+		sourceRegion,
+		destRegion,
 	)
 
 	assert.NoError(t, err)
@@ -140,6 +146,8 @@ func TestBackup_Adapt2(t *testing.T) {
 	sourceEndpoint := "endpoint"
 	destEndpoint := "endpoint"
 	sourcePrefix := "prefix"
+	sourceRegion := "region"
+	destRegion := "region"
 	dbURL := "testDB"
 	dbPort := int32(80)
 	image := "testImage"
@@ -175,10 +183,12 @@ func TestBackup_Adapt2(t *testing.T) {
 				destEndpoint,
 				core.DestAkidSecretPath,
 				core.DestSakSecretPath,
+				destRegion,
 				core.SourceAkidSecretPath,
 				core.SourceSakSecretPath,
 				sourceEndpoint,
 				sourcePrefix,
+				sourceRegion,
 				dbURL,
 				dbPort,
 			),
@@ -212,6 +222,8 @@ func TestBackup_Adapt2(t *testing.T) {
 		sourceEndpoint,
 		destEndpoint,
 		sourcePrefix,
+		sourceRegion,
+		destRegion,
 	)
 
 	assert.NoError(t, err)

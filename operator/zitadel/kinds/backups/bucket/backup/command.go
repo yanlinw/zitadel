@@ -15,6 +15,7 @@ func getBackupCommand(
 	dbPort int32,
 	assetEndpoint string,
 	assetPrefix string,
+	assetRegion string,
 ) string {
 
 	backupCommands := make([]string, 0)
@@ -35,6 +36,7 @@ func getBackupCommand(
 			"--asset-akid=" + akidSecretPath,
 			"--asset-sak=" + sakSecretPath,
 			"--asset-prefix=" + assetPrefix,
+			"--asset-region=" + assetRegion,
 			"--host=" + dbURL,
 			"--port=" + strconv.Itoa(int(dbPort)),
 			"--destination-sajsonpath=" + serviceAccountPath,
