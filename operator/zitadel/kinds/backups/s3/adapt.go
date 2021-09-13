@@ -259,8 +259,8 @@ func AdaptFunc(
 					desiredKind.Spec.Endpoint,
 					assetEndpoint,
 					assetPrefix,
-					assetRegion,
 					desiredKind.Spec.Region,
+					assetRegion,
 				)
 				if err != nil {
 					return nil, err

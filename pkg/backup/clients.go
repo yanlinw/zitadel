@@ -17,11 +17,10 @@ func getS3Client(
 	if region == "" {
 		reg = "us-east-1"
 	}
+
 	staticResolver := aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
 		return aws.Endpoint{
-			PartitionID:       "aws",
 			URL:               endpoint, // or where ever you ran minio
-			SigningRegion:     reg,
 			HostnameImmutable: true,
 		}, nil
 	})
