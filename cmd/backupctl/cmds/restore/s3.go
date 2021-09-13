@@ -19,6 +19,7 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 		sourceBucket   string
 		sourceAKID     string
 		sourceSAK      string
+		sourcePrefix   string
 		configPath     string
 		certsDir       string
 		host           string
@@ -40,6 +41,7 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 	flags.StringVar(&sourceAKID, "source-akid", "", "AccessKeyID for the source S3 storage")
 	flags.StringVar(&sourceSAK, "source-sak", "", "SecretAccessKey for the source S3 storage")
 	flags.StringVar(&sourceBucket, "source-bucket", "", "Bucketname in the source S3 storage")
+	flags.StringVar(&sourcePrefix, "source-prefix", "", "Prefix for the buckts in the source S3 storage")
 	flags.StringVar(&configPath, "configpath", "", "Path used to save rsync configuration")
 	flags.StringVar(&certsDir, "certs-dir", "", "Folder with certificates used to connect to cockroachdb")
 	flags.StringVar(&host, "host", "", "Host used to connect to cockroachdb")
@@ -67,7 +69,7 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			assetEndpoint,
 			assetAKID,
 			assetSAK,
-			"notempty",
+			sourcePrefix,
 		); err != nil {
 			return err
 		}
@@ -93,6 +95,7 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			sourceAKID,
 			sourceSAK,
 			sourceBucket,
+			sourcePrefix,
 			configPath,
 		); err != nil {
 			return err

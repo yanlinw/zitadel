@@ -44,6 +44,7 @@ func AdaptFunc(
 	image string,
 	sourceEndpoint string,
 	destEndpoint string,
+	sourcePrefix string,
 ) (
 	queryFunc operator.QueryFunc,
 	destroyFunc operator.DestroyFunc,
@@ -62,6 +63,7 @@ func AdaptFunc(
 		core.SourceAkidSecretPath,
 		core.SourceSakSecretPath,
 		sourceEndpoint,
+		sourcePrefix,
 		dbURL,
 		dbPort,
 	)

@@ -31,6 +31,7 @@ func GetConfigPartS3(
 			"access_key_id = {{.AccessKeyID}}\n" +
 			"secret_access_key = {{.SecretAccessKey}}\n" +
 			"endpoint = {{.Endpoint}}\n" +
+			"region = us-east-1\n" +
 			"acl = private\n")
 	if err != nil {
 		return "", err

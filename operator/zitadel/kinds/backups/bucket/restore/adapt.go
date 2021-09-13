@@ -48,6 +48,7 @@ func AdaptFunc(
 	dbPort int32,
 	image string,
 	assetEndpoint string,
+	assetPrefix string,
 ) (
 	queryFunc operator.QueryFunc,
 	destroyFunc operator.DestroyFunc,
@@ -64,6 +65,7 @@ func AdaptFunc(
 		dbURL,
 		dbPort,
 		assetEndpoint,
+		assetPrefix,
 	)
 
 	jobdef := getJob(

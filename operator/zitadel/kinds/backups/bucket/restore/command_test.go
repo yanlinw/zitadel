@@ -12,6 +12,7 @@ func TestBackup_Command1(t *testing.T) {
 	dbURL := "testDB"
 	dbPort := int32(80)
 	enpoint := "testEndpoint"
+	prefix := "testPrefix"
 
 	cmd := getCommand(
 		timestamp,
@@ -22,19 +23,21 @@ func TestBackup_Command1(t *testing.T) {
 		dbURL,
 		dbPort,
 		enpoint,
+		prefix,
 	)
 
-	equals := "export BACKUP_NAME=test1 && /backupctl restore gcs --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=testEndpoint --asset-akid=/secrets/akid --asset-sak=/secrets/sak --host=testDB --port=80 --source-sajsonpath=/secrets/sa.json --source-bucket=testBucket --certs-dir=/cockroach/cockroach-certs --configpath=/rsync.conf"
+	equals := "export BACKUP_NAME=test1 && /backupctl restore gcs --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=testEndpoint --asset-akid=/secrets/akid --asset-sak=/secrets/sak --host=testDB --port=80 --source-sajsonpath=/secrets/sa.json --source-bucket=testBucket --source-prefix=testPrefix --certs-dir=/cockroach/cockroach-certs --configpath=/rsync.conf"
 	assert.Equal(t, equals, cmd)
 }
 
 func TestBackup_Command2(t *testing.T) {
 	timestamp := "test2"
-	bucketName := "testBucket"
-	backupName := "testBackup"
+	bucketName := "testBucket2"
+	backupName := "testBackup2"
 	dbURL := "testDB2"
 	dbPort := int32(81)
-	enpoint := "testEndpoint"
+	enpoint := "testEndpoint2"
+	prefix := "testPrefix2"
 
 	cmd := getCommand(
 		timestamp,
@@ -45,7 +48,8 @@ func TestBackup_Command2(t *testing.T) {
 		dbURL,
 		dbPort,
 		enpoint,
+		prefix,
 	)
-	equals := "export BACKUP_NAME=test2 && /backupctl restore gcs --backupname=testBackup --backupnameenv=BACKUP_NAME --asset-endpoint=testEndpoint --asset-akid=/secrets/akid --asset-sak=/secrets/sak --host=testDB2 --port=81 --source-sajsonpath=/secrets/sa.json --source-bucket=testBucket --certs-dir=/cockroach/cockroach-certs --configpath=/rsync.conf"
+	equals := "export BACKUP_NAME=test2 && /backupctl restore gcs --backupname=testBackup2 --backupnameenv=BACKUP_NAME --asset-endpoint=testEndpoint2 --asset-akid=/secrets/akid --asset-sak=/secrets/sak --host=testDB2 --port=81 --source-sajsonpath=/secrets/sa.json --source-bucket=testBucket2 --source-prefix=testPrefix2 --certs-dir=/cockroach/cockroach-certs --configpath=/rsync.conf"
 	assert.Equal(t, equals, cmd)
 }

@@ -137,6 +137,7 @@ func AdaptFunc(
 			image,
 			desiredKind.Spec.Endpoint,
 			assetEndpoint,
+			assetPrefix,
 		)
 		if err != nil {
 			return nil, nil, nil, nil, nil, false, err
@@ -250,6 +251,7 @@ func AdaptFunc(
 					image,
 					desiredKind.Spec.Endpoint,
 					assetEndpoint,
+					assetPrefix,
 				)
 				if err != nil {
 					return nil, err

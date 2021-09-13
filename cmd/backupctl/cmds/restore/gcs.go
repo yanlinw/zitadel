@@ -17,6 +17,7 @@ func GCSCommand(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 		assetSAK         string
 		sourceBucket     string
 		sourceSAJSONPath string
+		sourcePrefix     string
 		configPath       string
 		certsDir         string
 		host             string
@@ -36,6 +37,7 @@ func GCSCommand(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 	flags.StringVar(&assetSAK, "asset-sak", "", "SecretAccessKey for the asset S3 storage")
 	flags.StringVar(&sourceSAJSONPath, "source-sajsonpath", "~/sa.json", "Path to where ServiceAccount-json will be written for the source GCS")
 	flags.StringVar(&sourceBucket, "source-bucket", "", "Bucketname in the source GCS")
+	flags.StringVar(&sourcePrefix, "source-prefix", "", "Prefix for asset buckets in the source GCS")
 	flags.StringVar(&configPath, "configpath", "~/rsync.conf", "Path used to save rsync configuration")
 	flags.StringVar(&certsDir, "certs-dir", "", "Folder with certificates used to connect to cockroachdb")
 	flags.StringVar(&host, "host", "", "Host used to connect to cockroachdb")
@@ -61,7 +63,7 @@ func GCSCommand(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			assetEndpoint,
 			assetAKID,
 			assetSAK,
-			"notempty",
+			sourcePrefix,
 		); err != nil {
 			return err
 		}
@@ -85,6 +87,7 @@ func GCSCommand(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			"source",
 			sourceSAJSONPath,
 			sourceBucket,
+			sourcePrefix,
 			configPath,
 		); err != nil {
 			return err

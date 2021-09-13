@@ -3,11 +3,9 @@ package backup
 import (
 	"cloud.google.com/go/storage"
 	"context"
-	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go/aws/awserr"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"io/ioutil"
@@ -38,42 +36,6 @@ func getS3Client(
 	}
 
 	return s3.NewFromConfig(cfg)
-}
-func ListS3AssetBuckets(
-	endpoint string,
-	accessKeyID string,
-	secretAccessKey string,
-	prefix string,
-) ([]string, error) {
-
-	s3Client := getS3Client(endpoint, accessKeyID, secretAccessKey)
-
-	input := &s3.ListBucketsInput{}
-
-	result, err := s3Client.ListBuckets(context.Background(), input)
-	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok {
-			switch aerr.Code() {
-			default:
-				fmt.Println(aerr.Error())
-			}
-		} else {
-			// Print the error, cast err to awserr.Error to get the Code and
-			// Message from an error.
-			fmt.Println(err.Error())
-		}
-		return nil, err
-	}
-
-	buckets := make([]string, 0)
-	for _, bucket := range result.Buckets {
-		name := *bucket.Name
-		if strings.HasPrefix(name, prefix) {
-			buckets = append(buckets, *bucket.Name)
-		}
-	}
-
-	return buckets, nil
 }
 
 func ListS3Folders(

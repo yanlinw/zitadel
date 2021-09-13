@@ -6,6 +6,7 @@ import (
 	"github.com/caos/zitadel/cmd/backupctl/cmds/helpers"
 	"github.com/caos/zitadel/pkg/backup"
 	"github.com/spf13/cobra"
+	"io/ioutil"
 )
 
 func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
@@ -79,6 +80,20 @@ func S3Command(ctx context.Context, monitor mntr.Monitor) *cobra.Command {
 			host,
 			port,
 		); err != nil {
+			return err
+		}
+
+		destinationAKIDData, err := ioutil.ReadFile(destAKID)
+		if err != nil {
+			return err
+		}
+
+		destinationSAKData, err := ioutil.ReadFile(destSAK)
+		if err != nil {
+			return err
+		}
+
+		if err := backup.CreateS3BucketIfNotExists(destEndpoint, string(destinationAKIDData), string(destinationSAKData), destBucket); err != nil {
 			return err
 		}
 

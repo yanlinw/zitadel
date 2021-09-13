@@ -14,6 +14,7 @@ func getCommand(
 	dbURL string,
 	dbPort int32,
 	assetEndpoint string,
+	assetPrefix string,
 ) string {
 
 	backupCommands := make([]string, 0)
@@ -33,6 +34,7 @@ func getCommand(
 			"--port=" + strconv.Itoa(int(dbPort)),
 			"--source-sajsonpath=" + serviceAccountPath,
 			"--source-bucket=" + bucketName,
+			"--source-prefix=" + assetPrefix,
 			"--certs-dir=" + certsFolder,
 			"--configpath=/rsync.conf",
 		}, " ",

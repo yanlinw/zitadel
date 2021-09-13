@@ -24,6 +24,7 @@ func RsyncRestoreS3ToS3(
 	sourceAKIDPath string,
 	sourceSAKPath string,
 	sourceBucket string,
+	sourcePrefix string,
 	configFilePath string,
 ) error {
 
@@ -73,6 +74,14 @@ func RsyncRestoreS3ToS3(
 
 	var wg sync.WaitGroup
 
+	if err := CleanS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), sourcePrefix); err != nil {
+		return err
+	}
+
+	if err := EnsureS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), assetBuckets, sourcePrefix); err != nil {
+		return err
+	}
+
 	for _, assetBucket := range assetBuckets {
 		wg.Add(1)
 		if err := runCommand(
@@ -105,6 +114,7 @@ func RsyncRestoreGCSToS3(
 	sourceName string,
 	sourceSaJsonPath string,
 	sourceBucket string,
+	sourcePrefix string,
 	configFilePath string,
 ) error {
 
@@ -143,6 +153,14 @@ func RsyncRestoreGCSToS3(
 	}
 
 	var wg sync.WaitGroup
+
+	if err := CleanS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), sourcePrefix); err != nil {
+		return err
+	}
+
+	if err := EnsureS3BucketsWithPrefix(destinationEndpoint, string(destinationAKID), string(destinationSAK), assetBuckets, sourcePrefix); err != nil {
+		return err
+	}
 
 	for _, assetBucket := range assetBuckets {
 		wg.Add(1)

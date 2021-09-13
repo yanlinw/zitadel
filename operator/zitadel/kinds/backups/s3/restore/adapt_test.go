@@ -36,6 +36,7 @@ func TestBackup_Adapt1(t *testing.T) {
 	destSAKKey := "testSAK"
 	sourceEndpoint := "endpoint"
 	destEndpoint := "endpoint"
+	sourcePrefix := "prefix"
 	dbURL := "testDB"
 	dbPort := int32(80)
 	image := "testImage"
@@ -74,6 +75,7 @@ func TestBackup_Adapt1(t *testing.T) {
 				core.SourceAkidSecretPath,
 				core.SourceSakSecretPath,
 				destEndpoint,
+				sourcePrefix,
 				dbURL,
 				dbPort,
 			),
@@ -106,6 +108,7 @@ func TestBackup_Adapt1(t *testing.T) {
 		image,
 		sourceEndpoint,
 		destEndpoint,
+		sourcePrefix,
 	)
 
 	assert.NoError(t, err)
@@ -136,6 +139,7 @@ func TestBackup_Adapt2(t *testing.T) {
 	destSAKKey := "testSAK2"
 	sourceEndpoint := "endpoint"
 	destEndpoint := "endpoint"
+	sourcePrefix := "prefix"
 	dbURL := "testDB"
 	dbPort := int32(80)
 	image := "testImage"
@@ -174,6 +178,7 @@ func TestBackup_Adapt2(t *testing.T) {
 				core.SourceAkidSecretPath,
 				core.SourceSakSecretPath,
 				sourceEndpoint,
+				sourcePrefix,
 				dbURL,
 				dbPort,
 			),
@@ -206,6 +211,7 @@ func TestBackup_Adapt2(t *testing.T) {
 		image,
 		sourceEndpoint,
 		destEndpoint,
+		sourcePrefix,
 	)
 
 	assert.NoError(t, err)

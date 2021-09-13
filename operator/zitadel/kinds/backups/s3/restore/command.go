@@ -16,6 +16,7 @@ func getCommand(
 	sourceAKIDPath string,
 	sourceSAKPath string,
 	sourceEndpoint string,
+	sourcePrefix string,
 	dbURL string,
 	dbPort int32,
 ) string {
@@ -37,6 +38,7 @@ func getCommand(
 			"--source-akid=" + sourceAKIDPath,
 			"--source-sak=" + sourceSAKPath,
 			"--source-bucket=" + bucketName,
+			"--source-prefix=" + sourcePrefix,
 			"--host=" + dbURL,
 			"--port=" + strconv.Itoa(int(dbPort)),
 			"--certs-dir=" + certsFolder,
