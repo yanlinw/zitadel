@@ -21,6 +21,7 @@ func getS3Client(
 	staticResolver := aws.EndpointResolverFunc(func(service, region string) (aws.Endpoint, error) {
 		return aws.Endpoint{
 			URL:               endpoint, // or where ever you ran minio
+			SigningRegion:     reg,
 			HostnameImmutable: true,
 		}, nil
 	})
