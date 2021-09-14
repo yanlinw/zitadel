@@ -248,9 +248,13 @@ func CockroachRestoreFromS3(
 		return err
 	}
 
-	sessionToken, err := ioutil.ReadFile(sessionTokenPath)
-	if err != nil {
-		return err
+	sessionToken := []byte("")
+	if sessionTokenPath != "" {
+		sessionTokenT, err := ioutil.ReadFile(sessionTokenPath)
+		if err != nil {
+			return err
+		}
+		sessionToken = sessionTokenT
 	}
 
 	err = runCommand(

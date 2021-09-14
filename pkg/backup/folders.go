@@ -36,7 +36,7 @@ func ListS3Folders(
 		objects = append(objects, *obj.Key)
 	}
 
-	return objects, nil
+	return getAllAssetFoldersFromObjectList(objects, path), nil
 }
 
 func ListGCSFolders(
@@ -62,6 +62,7 @@ func ListGCSFolders(
 			Versions: false,
 		},
 	)
+
 	objects := make([]string, 0)
 	for {
 		obj, err := iter.Next()
@@ -71,27 +72,40 @@ func ListGCSFolders(
 		if err != nil {
 			return nil, err
 		}
-		if strings.HasPrefix(obj.Name, path) {
-			folder := strings.TrimPrefix(obj.Name, path+"/")
-			for {
-				folderT, _ := filepath.Split(folder)
-				folder = strings.TrimSuffix(folderT, string(filepath.Separator))
-				if !strings.Contains(folder, string(filepath.Separator)) {
-					break
-				}
-			}
+		objects = append(objects, obj.Name)
+	}
+
+	return getAllAssetFoldersFromObjectList(objects, path), nil
+}
+
+func getAllAssetFoldersFromObjectList(objects []string, path string) []string {
+	folders := make([]string, 0)
+	for _, object := range objects {
+		if strings.HasPrefix(object, path) {
+			assetFolder := getAssetFolderFromObject(path, object)
 
 			alreadyListed := false
-			for _, object := range objects {
-				if object == folder {
+			for _, folder := range folders {
+				if assetFolder == folder {
 					alreadyListed = true
 				}
 			}
 			if !alreadyListed {
-				objects = append(objects, folder)
+				folders = append(folders, assetFolder)
 			}
 		}
 	}
+	return folders
+}
 
-	return objects, nil
+func getAssetFolderFromObject(path, object string) string {
+	folder := strings.TrimPrefix(object, path+"/")
+	for {
+		folderT, _ := filepath.Split(folder)
+		folder = strings.TrimSuffix(folderT, string(filepath.Separator))
+		if !strings.Contains(folder, string(filepath.Separator)) {
+			break
+		}
+	}
+	return folder
 }

@@ -422,6 +422,13 @@ func AdaptFunc(
 								return nil, err
 							}
 
+							endpoint := desiredKind.Spec.Configuration.AssetStorage.Endpoint
+							if desiredKind.Spec.Configuration.AssetStorage.SSL {
+								endpoint = "https://" + endpoint
+							} else {
+								endpoint = "http://" + endpoint
+							}
+
 							queryB, _, _, _, _, _, err := backups.Adapt(
 								internalMonitor,
 								desiredBackup,
@@ -440,7 +447,7 @@ func AdaptFunc(
 								int32(port),
 								features,
 								customImageRegistry,
-								desiredKind.Spec.Configuration.AssetStorage.Endpoint,
+								endpoint,
 								aid,
 								sak,
 								desiredKind.Spec.Configuration.AssetStorage.BucketPrefix,
