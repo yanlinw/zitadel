@@ -36,7 +36,7 @@ RUN chmod a+x /app/backupctl
 ## CokroachDB Image for cockroach binary
 FROM cockroachdb/cockroach:v21.1.8 as final
 
-RUN microdnf install -y rsync curl unzip
+RUN microdnf install -y rsync curl unzip openssl
 RUN curl https://rclone.org/install.sh | bash
 
 COPY --from=artifact /app /
