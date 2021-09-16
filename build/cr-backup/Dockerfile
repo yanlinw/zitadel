@@ -26,18 +26,39 @@ FROM go-base as dev-go-build
 RUN go get github.com/go-delve/delve/cmd/dlv
 
 #######################
-## Final Production Image
+## Build binary
 #######################
 FROM alpine:latest as artifact
 
 COPY --from=prod-go-build /go/src/github.com/caos/zitadel/backupctl /app/backupctl
 RUN chmod a+x /app/backupctl
 
-## CokroachDB Image for cockroach binary
-FROM cockroachdb/cockroach:v21.1.8 as final
+#######################
+## Final Production Image
+#######################
+FROM alpine:latest as final
+RUN apk update
+RUN apk upgrade
+RUN apk --no-cache add rsync rclone openssl tzdata tar bash
 
-RUN microdnf install -y rsync curl unzip openssl
-RUN curl https://rclone.org/install.sh | bash
+ENV GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc
+ENV GLIBC_VERSION=2.30-r0
+
+# Compatibility with glibc which is used by cockroach linking
+RUN set -ex && \
+    apk --update add libstdc++ curl ca-certificates && \
+    for pkg in glibc-${GLIBC_VERSION} glibc-bin-${GLIBC_VERSION}; \
+        do curl -sSL ${GLIBC_REPO}/releases/download/${GLIBC_VERSION}/${pkg}.apk -o /tmp/${pkg}.apk; done && \
+    apk add --allow-untrusted /tmp/*.apk && \
+    rm -v /tmp/*.apk && \
+    /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib
+
+# cockroach binary used to backup database
+RUN mkdir /usr/local/lib/cockroach
+RUN wget -qO- https://binaries.cockroachdb.com/cockroach-v21.1.7.linux-amd64.tgz \
+    | tar  xvz && cp -i cockroach-v21.1.7.linux-amd64/cockroach /usr/local/bin/
+RUN cp -i cockroach-v21.1.7.linux-amd64/lib/libgeos.so /usr/local/lib/cockroach/
+RUN cp -i cockroach-v21.1.7.linux-amd64/lib/libgeos_c.so /usr/local/lib/cockroach/
 
 COPY --from=artifact /app /
 HEALTHCHECK NONE
