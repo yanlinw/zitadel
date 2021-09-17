@@ -39,7 +39,7 @@ RUN chmod a+x /app/backupctl
 FROM alpine:latest as final
 RUN apk update
 RUN apk upgrade
-RUN apk --no-cache add rsync rclone openssl tzdata tar bash
+RUN apk --no-cache add openssl tzdata tar bash unzip
 
 ENV GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc
 ENV GLIBC_VERSION=2.30-r0
@@ -59,6 +59,13 @@ RUN wget -qO- https://binaries.cockroachdb.com/cockroach-v21.1.7.linux-amd64.tgz
     | tar  xvz && cp -i cockroach-v21.1.7.linux-amd64/cockroach /usr/local/bin/
 RUN cp -i cockroach-v21.1.7.linux-amd64/lib/libgeos.so /usr/local/lib/cockroach/
 RUN cp -i cockroach-v21.1.7.linux-amd64/lib/libgeos_c.so /usr/local/lib/cockroach/
+RUN rm -r cockroach-v21.1.7.linux-amd64
+
+RUN wget -q https://downloads.rclone.org/v1.35/rclone-v1.35-linux-amd64.zip -O ./rclone.zip
+RUN unzip ./rclone.zip && cp ./rclone-v1.35-linux-amd64/rclone /usr/bin/rclone
+RUN rm -r ./rclone.zip
+RUN rm -r ./rclone-v1.35-linux-amd64
+RUN chmod +x /usr/bin/rclone
 
 COPY --from=artifact /app /
 HEALTHCHECK NONE
