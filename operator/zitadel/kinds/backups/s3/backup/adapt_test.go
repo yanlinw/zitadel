@@ -1,6 +1,7 @@
 package backup
 
 import (
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
 	"github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
 	"testing"
 
@@ -53,7 +54,7 @@ func TestBackup_AdaptInstantBackup1(t *testing.T) {
 		return nil
 	}
 
-	jobDef := core.GetJob(
+	jobDef := core2.GetJob(
 		namespace,
 		nameLabels,
 		core.GetJobSpecDef(
@@ -166,7 +167,7 @@ func TestBackup_AdaptInstantBackup2(t *testing.T) {
 		return nil
 	}
 
-	jobDef := core.GetJob(
+	jobDef := core2.GetJob(
 		namespace,
 		nameLabels,
 		core.GetJobSpecDef(
@@ -279,7 +280,7 @@ func TestBackup_AdaptBackup1(t *testing.T) {
 		return nil
 	}
 
-	jobDef := core.GetCronJob(
+	jobDef := core2.GetCronJob(
 		namespace,
 		nameLabels,
 		cron,
@@ -392,7 +393,7 @@ func TestBackup_AdaptBackup2(t *testing.T) {
 		return nil
 	}
 
-	jobDef := core.GetCronJob(
+	jobDef := core2.GetCronJob(
 		namespace,
 		nameLabels,
 		cron,

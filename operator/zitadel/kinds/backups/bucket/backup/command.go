@@ -11,6 +11,8 @@ func getBackupCommand(
 	backupName string,
 	certsFolder string,
 	serviceAccountPath string,
+	akidSecretPath string,
+	sakSecretPath string,
 	dbURL string,
 	dbPort int32,
 	assetEndpoint string,

@@ -1,6 +1,8 @@
 package restore
 
 import (
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/core"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
 	"time"
 
 	"github.com/caos/zitadel/operator"
@@ -13,21 +15,11 @@ import (
 )
 
 const (
-	Instant                 = "restore"
-	defaultMode             = int32(256)
-	certPath                = "/cockroach/cockroach-certs"
-	saInternalSecretName    = "sa-json"
-	saSecretPath            = "/secrets/sa.json"
-	akidInternalSecretName  = "akid"
-	akidSecretPath          = "/secrets/akid"
-	sakInternalSecretName   = "sak"
-	sakSecretPath           = "/secrets/sak"
-	jobPrefix               = "backup-"
-	jobSuffix               = "-restore"
-	certsInternalSecretName = "client-certs"
-	rootSecretName          = "cockroachdb.client.root"
-	timeout                 = 45 * time.Minute
-	backupNameEnv           = "BACKUP_NAME"
+	Instant       = "restore"
+	jobPrefix     = "backup-"
+	jobSuffix     = "-restore"
+	timeout       = 45 * time.Minute
+	backupNameEnv = "BACKUP_NAME"
 )
 
 func AdaptFunc(
@@ -56,13 +48,14 @@ func AdaptFunc(
 	err error,
 ) {
 
-	jobName := jobPrefix + backupName + jobSuffix
 	command := getCommand(
 		timestamp,
 		bucketName,
 		backupName,
-		certPath,
-		saSecretPath,
+		core2.CertPath,
+		core2.SaSecretPath,
+		core2.AkidSecretPath,
+		core2.SakSecretPath,
 		dbURL,
 		dbPort,
 		assetEndpoint,
@@ -70,20 +63,23 @@ func AdaptFunc(
 		assetRegion,
 	)
 
-	jobdef := getJob(
+	jobdef := core.GetJob(
 		namespace,
 		labels.MustForName(componentLabels, GetJobName(backupName)),
-		nodeselector,
-		tolerations,
-		backupSecretName,
-		saSecretKey,
-		assetAKIDKey,
-		assetSAKKey,
-		command,
-		image,
+		core2.GetJobSpecDef(
+			nodeselector,
+			tolerations,
+			backupSecretName,
+			saSecretKey,
+			assetAKIDKey,
+			assetSAKKey,
+			backupName,
+			command,
+			image,
+		),
 	)
 
-	destroyJ, err := job.AdaptFuncToDestroy(jobName, namespace)
+	destroyJ, err := job.AdaptFuncToDestroy(GetJobName(backupName), namespace)
 	if err != nil {
 		return nil, nil, err
 	}

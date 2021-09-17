@@ -1,6 +1,7 @@
 package backup
 
 import (
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/core"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -19,8 +20,10 @@ func TestBackup_Command1(t *testing.T) {
 		timestamp,
 		bucketName,
 		backupName,
-		certPath,
-		saSecretPath,
+		core2.CertPath,
+		core2.SaSecretPath,
+		core2.AkidSecretPath,
+		core2.SakSecretPath,
 		dbURL,
 		dbPort,
 		enpoint,
@@ -45,8 +48,10 @@ func TestBackup_Command2(t *testing.T) {
 		timestamp,
 		bucketName,
 		backupName,
-		certPath,
-		saSecretPath,
+		core2.CertPath,
+		core2.SaSecretPath,
+		core2.AkidSecretPath,
+		core2.SakSecretPath,
 		dbURL,
 		dbPort,
 		enpoint,

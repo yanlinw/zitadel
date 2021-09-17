@@ -1,4 +1,4 @@
-package backup
+package core
 
 import (
 	"testing"
@@ -38,19 +38,19 @@ func TestBackup_JobSpec1(t *testing.T) {
 					VolumeMounts: []corev1.VolumeMount{
 						{
 							Name:      certsInternalSecretName,
-							MountPath: certPath,
+							MountPath: CertPath,
 						}, {
 							Name:      saInternalSecretName,
 							SubPath:   saSecretKey,
-							MountPath: saSecretPath,
+							MountPath: SaSecretPath,
 						}, {
 							Name:      akidInternalSecretName,
 							SubPath:   assetAKIDKey,
-							MountPath: akidSecretPath,
+							MountPath: AkidSecretPath,
 						}, {
 							Name:      sakInternalSecretName,
 							SubPath:   assetSAKKey,
-							MountPath: sakSecretPath,
+							MountPath: SakSecretPath,
 						},
 					},
 					ImagePullPolicy: corev1.PullAlways,
@@ -94,7 +94,7 @@ func TestBackup_JobSpec1(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, equals, getJobSpecDef(
+	assert.Equal(t, equals, GetJobSpecDef(
 		nodeselector,
 		tolerations,
 		backupSecretName,
@@ -136,19 +136,19 @@ func TestBackup_JobSpec2(t *testing.T) {
 					VolumeMounts: []corev1.VolumeMount{
 						{
 							Name:      certsInternalSecretName,
-							MountPath: certPath,
+							MountPath: CertPath,
 						}, {
 							Name:      saInternalSecretName,
 							SubPath:   saSecretKey,
-							MountPath: saSecretPath,
+							MountPath: SaSecretPath,
 						}, {
 							Name:      akidInternalSecretName,
 							SubPath:   assetAKIDKey,
-							MountPath: akidSecretPath,
+							MountPath: AkidSecretPath,
 						}, {
 							Name:      sakInternalSecretName,
 							SubPath:   assetSAKKey,
-							MountPath: sakSecretPath,
+							MountPath: SakSecretPath,
 						},
 					},
 					ImagePullPolicy: corev1.PullAlways,
@@ -192,7 +192,7 @@ func TestBackup_JobSpec2(t *testing.T) {
 		},
 	}
 
-	assert.Equal(t, equals, getJobSpecDef(
+	assert.Equal(t, equals, GetJobSpecDef(
 		nodeselector,
 		tolerations,
 		backupSecretName,

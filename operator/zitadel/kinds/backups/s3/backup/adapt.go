@@ -1,7 +1,8 @@
 package backup
 
 import (
-	"github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
 	"time"
 
 	"github.com/caos/zitadel/operator"
@@ -60,21 +61,21 @@ func AdaptFunc(
 		timestamp,
 		bucketName,
 		backupName,
-		core.CertPath,
+		core2.CertPath,
 		sourceEndpoint,
-		core.SourceAkidSecretPath,
-		core.SourceSakSecretPath,
+		core2.SourceAkidSecretPath,
+		core2.SourceSakSecretPath,
 		sourcePrefix,
 		sourceRegion,
-		core.DestAkidSecretPath,
-		core.DestSakSecretPath,
+		core2.DestAkidSecretPath,
+		core2.DestSakSecretPath,
 		destEndpoint,
 		destRegion,
 		dbURL,
 		dbPort,
 	)
 
-	jobSpecDef := core.GetJobSpecDef(
+	jobSpecDef := core2.GetJobSpecDef(
 		nodeselector,
 		tolerations,
 		sourceAKIDName,

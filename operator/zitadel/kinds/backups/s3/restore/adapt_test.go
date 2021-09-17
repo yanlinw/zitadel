@@ -1,6 +1,7 @@
 package restore
 
 import (
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
 	"github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
 	"testing"
 
@@ -50,7 +51,7 @@ func TestBackup_Adapt1(t *testing.T) {
 		return nil
 	}
 
-	jobDef := core.GetJob(
+	jobDef := core2.GetJob(
 		namespace,
 		nameLabels,
 		core.GetJobSpecDef(
@@ -159,7 +160,7 @@ func TestBackup_Adapt2(t *testing.T) {
 		return nil
 	}
 
-	jobDef := core.GetJob(
+	jobDef := core2.GetJob(
 		namespace,
 		nameLabels,
 		core.GetJobSpecDef(

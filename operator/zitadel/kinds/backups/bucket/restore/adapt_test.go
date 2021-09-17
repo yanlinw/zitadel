@@ -1,6 +1,8 @@
 package restore
 
 import (
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/core"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
 	"testing"
 
 	"github.com/caos/orbos/mntr"
@@ -43,28 +45,33 @@ func TestBackup_Adapt1(t *testing.T) {
 		return nil
 	}
 
-	jobDef := getJob(
+	jobDef := core.GetJob(
 		namespace,
 		nameLabels,
-		nodeselector,
-		tolerations,
-		secretName,
-		saSecretKey,
-		akidKey,
-		sakKey,
-		getCommand(
-			timestamp,
-			bucketName,
+		core2.GetJobSpecDef(
+			nodeselector,
+			tolerations,
+			secretName,
+			saSecretKey,
+			akidKey,
+			sakKey,
 			backupName,
-			certPath,
-			saSecretPath,
-			dbURL,
-			dbPort,
-			endpoint,
-			prefix,
-			region,
+			getCommand(
+				timestamp,
+				bucketName,
+				backupName,
+				core2.CertPath,
+				core2.SaSecretPath,
+				core2.AkidSecretPath,
+				core2.SakSecretPath,
+				dbURL,
+				dbPort,
+				endpoint,
+				prefix,
+				region,
+			),
+			image,
 		),
-		image,
 	)
 
 	client.EXPECT().ApplyJob(jobDef).Times(1).Return(nil)
@@ -128,28 +135,33 @@ func TestBackup_Adapt2(t *testing.T) {
 		return nil
 	}
 
-	jobDef := getJob(
+	jobDef := core.GetJob(
 		namespace,
 		nameLabels,
-		nodeselector,
-		tolerations,
-		secretName,
-		saSecretKey,
-		akidKey,
-		sakKey,
-		getCommand(
-			timestamp,
-			bucketName,
+		core2.GetJobSpecDef(
+			nodeselector,
+			tolerations,
+			secretName,
+			saSecretKey,
+			akidKey,
+			sakKey,
 			backupName,
-			certPath,
-			saSecretPath,
-			dbURL,
-			dbPort,
-			endpoint,
-			prefix,
-			region,
+			getCommand(
+				timestamp,
+				bucketName,
+				backupName,
+				core2.CertPath,
+				core2.SaSecretPath,
+				core2.AkidSecretPath,
+				core2.SakSecretPath,
+				dbURL,
+				dbPort,
+				endpoint,
+				prefix,
+				region,
+			),
+			image,
 		),
-		image,
 	)
 
 	client.EXPECT().ApplyJob(jobDef).Times(1).Return(nil)

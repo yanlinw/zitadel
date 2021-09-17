@@ -2,6 +2,8 @@ package backup
 
 import (
 	"github.com/caos/orbos/pkg/kubernetes/resources/secret"
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/core"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
 	"time"
 
 	"github.com/caos/zitadel/operator"
@@ -15,21 +17,11 @@ import (
 )
 
 const (
-	defaultMode             int32 = 256
-	certPath                      = "/cockroach/cockroach-certs"
-	saInternalSecretName          = "sa-json"
-	saSecretPath                  = "/secrets/sa.json"
-	akidInternalSecretName        = "akid"
-	akidSecretPath                = "/secrets/akid"
-	sakInternalSecretName         = "sak"
-	sakSecretPath                 = "/secrets/sak"
-	backupNameEnv                 = "BACKUP_NAME"
-	cronJobNamePrefix             = "backup-"
-	certsInternalSecretName       = "client-certs"
-	rootSecretName                = "cockroachdb.client.root"
-	timeout                       = 15 * time.Minute
-	Normal                        = "backup"
-	Instant                       = "instantbackup"
+	backupNameEnv     = "BACKUP_NAME"
+	cronJobNamePrefix = "backup-"
+	timeout           = 15 * time.Minute
+	Normal            = "backup"
+	Instant           = "instantbackup"
 )
 
 func AdaptFunc(
@@ -69,8 +61,10 @@ func AdaptFunc(
 		timestamp,
 		bucketName,
 		backupName,
-		certPath,
-		saSecretPath,
+		core2.CertPath,
+		core2.SaSecretPath,
+		core2.AkidSecretPath,
+		core2.SakSecretPath,
 		dbURL,
 		dbPort,
 		assetEndpoint,
@@ -78,7 +72,7 @@ func AdaptFunc(
 		assetRegion,
 	)
 
-	jobSpecDef := getJobSpecDef(
+	jobSpecDef := core2.GetJobSpecDef(
 		nodeselector,
 		tolerations,
 		backupSecretName,
@@ -93,7 +87,7 @@ func AdaptFunc(
 	destroyers := []operator.DestroyFunc{}
 	queriers := []operator.QueryFunc{}
 
-	cronJobDef := getCronJob(
+	cronJobDef := core.GetCronJob(
 		namespace,
 		labels.MustForName(componentLabels, GetJobName(backupName)),
 		cron,
@@ -110,7 +104,7 @@ func AdaptFunc(
 		return nil, nil, err
 	}
 
-	jobDef := getJob(
+	jobDef := core.GetJob(
 		namespace,
 		labels.MustForName(componentLabels, cronJobNamePrefix+backupName),
 		jobSpecDef,

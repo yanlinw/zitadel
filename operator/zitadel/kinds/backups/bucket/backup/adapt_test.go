@@ -1,6 +1,8 @@
 package backup
 
 import (
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/bucket/core"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
 	"testing"
 
 	"github.com/caos/orbos/mntr"
@@ -46,10 +48,10 @@ func TestBackup_AdaptInstantBackup1(t *testing.T) {
 		return nil
 	}
 
-	jobDef := getJob(
+	jobDef := core.GetJob(
 		namespace,
 		nameLabels,
-		getJobSpecDef(
+		core2.GetJobSpecDef(
 			nodeselector,
 			tolerations,
 			secretName,
@@ -61,8 +63,10 @@ func TestBackup_AdaptInstantBackup1(t *testing.T) {
 				timestamp,
 				bucketName,
 				backupName,
-				certPath,
-				saSecretPath,
+				core2.CertPath,
+				core2.SaSecretPath,
+				core2.AkidSecretPath,
+				core2.SakSecretPath,
 				dbURL,
 				dbPort,
 				endpoint,
@@ -138,10 +142,10 @@ func TestBackup_AdaptInstantBackup2(t *testing.T) {
 		return nil
 	}
 
-	jobDef := getJob(
+	jobDef := core.GetJob(
 		namespace,
 		nameLabels,
-		getJobSpecDef(
+		core2.GetJobSpecDef(
 			nodeselector,
 			tolerations,
 			secretName,
@@ -153,8 +157,10 @@ func TestBackup_AdaptInstantBackup2(t *testing.T) {
 				timestamp,
 				bucketName,
 				backupName,
-				certPath,
-				saSecretPath,
+				core2.CertPath,
+				core2.SaSecretPath,
+				core2.AkidSecretPath,
+				core2.SakSecretPath,
 				dbURL,
 				dbPort,
 				endpoint,
@@ -230,11 +236,11 @@ func TestBackup_AdaptBackup1(t *testing.T) {
 		return nil
 	}
 
-	jobDef := getCronJob(
+	jobDef := core.GetCronJob(
 		namespace,
 		nameLabels,
 		cron,
-		getJobSpecDef(
+		core2.GetJobSpecDef(
 			nodeselector,
 			tolerations,
 			secretName,
@@ -246,8 +252,10 @@ func TestBackup_AdaptBackup1(t *testing.T) {
 				timestamp,
 				bucketName,
 				backupName,
-				certPath,
-				saSecretPath,
+				core2.CertPath,
+				core2.SaSecretPath,
+				core2.AkidSecretPath,
+				core2.SakSecretPath,
 				dbURL,
 				dbPort,
 				endpoint,
@@ -322,11 +330,11 @@ func TestBackup_AdaptBackup2(t *testing.T) {
 		return nil
 	}
 
-	jobDef := getCronJob(
+	jobDef := core.GetCronJob(
 		namespace,
 		nameLabels,
 		cron,
-		getJobSpecDef(
+		core2.GetJobSpecDef(
 			nodeselector,
 			tolerations,
 			secretName,
@@ -338,8 +346,10 @@ func TestBackup_AdaptBackup2(t *testing.T) {
 				timestamp,
 				bucketName,
 				backupName,
-				certPath,
-				saSecretPath,
+				core2.CertPath,
+				core2.SaSecretPath,
+				core2.AkidSecretPath,
+				core2.SakSecretPath,
 				dbURL,
 				dbPort,
 				endpoint,

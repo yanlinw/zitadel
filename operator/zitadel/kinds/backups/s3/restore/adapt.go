@@ -1,7 +1,8 @@
 package restore
 
 import (
-	"github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
+	"github.com/caos/zitadel/operator/zitadel/kinds/backups/core"
+	core2 "github.com/caos/zitadel/operator/zitadel/kinds/backups/s3/core"
 	"time"
 
 	"github.com/caos/zitadel/operator"
@@ -58,13 +59,13 @@ func AdaptFunc(
 		timestamp,
 		bucketName,
 		backupName,
-		core.CertPath,
+		core2.CertPath,
 		destEndpoint,
-		core.DestAkidSecretPath,
-		core.DestSakSecretPath,
+		core2.DestAkidSecretPath,
+		core2.DestSakSecretPath,
 		destRegion,
-		core.SourceAkidSecretPath,
-		core.SourceSakSecretPath,
+		core2.SourceAkidSecretPath,
+		core2.SourceSakSecretPath,
 		sourceEndpoint,
 		sourcePrefix,
 		sourceRegion,
@@ -75,7 +76,7 @@ func AdaptFunc(
 	jobdef := core.GetJob(
 		namespace,
 		labels.MustForName(componentLabels, GetJobName(backupName)),
-		core.GetJobSpecDef(
+		core2.GetJobSpecDef(
 			nodeselector,
 			tolerations,
 			sourceAKIDName,
